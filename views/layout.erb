@@ -1,0 +1,67 @@
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            width: 940px;
+            margin: 0 auto;
+        }
+        hr {
+            width: 940px;
+            height: 16px;
+            background-color: #114566;
+            margin: 16 auto;
+        }
+        .container {
+            width: 940px;
+            margin: 0 auto;
+        }
+        #social.container > iframe {
+            width: 462px;
+            height: 600px;
+            float: left;
+        }
+        #social.container > iframe:nth-child(2) {
+            float: right;
+        }
+        #coverflow_wrapper {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            height: 500px;
+        }
+        #coverflow {
+            display: inline-block;
+            height: 600px;
+            width: 2600px;
+            position: absolute;
+            padding: 42px;
+            top: 0px;
+            left: 0px;
+            margin-top: 50px;
+            -webkit-perspective: 35em;
+        }
+
+        #coverflow img {
+            width: 260px;
+            height: 260px;
+            float: left;
+            position: relative;
+            margin: -35px;
+             -webkit-box-reflect: below 8px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(.7, transparent), to(rgba(0,0,0,0.4)));
+
+        }
+            
+    </style>
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>    
+</head>
+<body>
+    <header>
+        <img src="/logo.jpg"></img>
+    </header>
+    <hr>
+    <%= yield %>
+</body>
