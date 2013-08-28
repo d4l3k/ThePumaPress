@@ -1,0 +1,30 @@
+<section class="container">
+<div class="hero-unit">
+  <h1>Sign In</h1>
+  <p>
+  <form class="form-horizontal" action='login' method='post'>
+    <input type="hidden" name="redirect" value="<%= env["QUERY_STRING"] %>">
+  <div class="control-group">
+    <label class="control-label" for="email">UPrep Username</label>
+    <div class="controls">
+      <input type="text" name='email' id="email" placeholder="Email">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="password">Password</label>
+    <div class="controls">
+      <input type="password" name='password' id="password" placeholder="Password">
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox"> Remember me
+      </label>
+      <button type="submit" class="btn btn-primary">Sign in</button>
+    </div>
+  </div>
+</form>
+</p>
+</div>
+</section>

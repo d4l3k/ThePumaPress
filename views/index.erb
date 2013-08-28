@@ -3,18 +3,9 @@
 
 <section id="coverflow_wrapper">
     <div id="coverflow">
-        <img src="img/gorillaz-plasticbeach.jpg" data-artist="Gorillaz" data-album="Plastic Beach"/>
-        <img src="img/kingsofleon-comearoundsunshine.jpg" data-artist="Kings Of Leon" data-album="Come Around Sunshine"/>
-        <img src="img/kidrock-bornfree.jpg" data-artist="Kid Rock" data-album="Born Free"/>		
-        <img src="img/recovery-recovery.jpg" data-artist="Eminem" data-album="Recovery"/>
-        <img src="img/lilwayne-iamnotahumanbeing.jpg" data-artist="Lil Wayne" data-album="I Am Not A Human Being"/>
-        <img src="img/taylorswift-speaknow.jpg" data-artist="Taylor Swift" data-album="Speak Now"/>
-        <img src="img/thebandperry-thebandperry.jpg" data-artist="The Band Perry" data-album="The Band Perry"/>
-        <img src="img/maroon5-handsallover.jpg" data-artist="Maroon 5" data-album="Hands All Over"/>
-        <img src="img/mychemicalromance-dangerdays.jpg" data-artist="My Chemical Romance" data-album="Danger Days"/>
-        <img src="img/ironmaiden-thefinalfrontier.jpg" data-artist="Iron Maiden" data-album="The Final Frontier"/>
-        <img src="img/order of the black - black label society.jpg" data-artist="Order Of The Black" data-album="Black Label Society"/>	
-        <img src="img/usher-raymondvraymond.jpg" data-artist="Usher" data-album="Raymond V Raymond"/>
+        <% Article.all.each do |art| %>
+            <img src="<%= art.image %>" data-id=<%= art.id %> data-title="<%= art.title %>"></img>
+        <% end %>
     </div>
 </section>
 <hr>

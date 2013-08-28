@@ -1,5 +1,9 @@
 <head>
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
     <style>
+        * {
+            font-family: 'Lato', sans-serif;
+        }
         body {
             margin: 0;
             padding: 0;
@@ -55,12 +59,15 @@
         }
             
     </style>
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
     <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>    
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="/js/nprogress.js"></script>
+    <link href="/css/nprogress.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <header>
-        <img src="/logo.jpg"></img>
+        <a href="/"><img src="/logo.jpg"></img></a>
     </header>
     <hr>
     <%= yield %>

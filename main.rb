@@ -6,10 +6,11 @@ DataMapper.setup(:default, 'postgres://postgres:@192.168.1.152/websync')
 class Article
   include DataMapper::Resource
     property :id,         Serial
-    property :title,      String
-    property :image,      String
-    property :body,       Text
-    property :created_at, DateTime
+    property :title,      String, :default => ''
+    property :image,      Text, :default => ''
+    property :body,       Text, :default => ''
+    property :published,  Boolean, :default => false
+    property :published_on, DateTime
     belongs_to :user
 end
 
@@ -34,23 +35,23 @@ class UserHash
 end
 
 DataMapper.finalize
-DataMapper.auto_migrate!
+DataMapper.auto_upgrade!
 
-helpers do
+module Helpers
     def current_user
         if logged_in?
             return User.get(session['user'])
         end
         nil
     end
-    def admin_required
-        if not admin?
+    def editor_required!
+        if not editor?
             redirect "/"
         end
     end
-    def admin?
+    def editor?
         c_user = current_user
-        not c_user.nil? and c_user.group=="admin"
+        not c_user.nil? and c_user.access_level=="editor"
     end
     def logged_in?
         (!session['userhash'].nil?)&&UserHash.get(session['userhash']).value==session['user']
@@ -60,29 +61,22 @@ helpers do
             redirect "/login?#{env["REQUEST_PATH"]}"
         end
     end
-    def register email, pass
-        email.downcase!
-        if User.get(email).nil?
-            user = User.create({:email=>email,:password=>pass})
-            authenticate email, pass
-            return user
-        elsif authenticate email, pass
-            return current_user
-        end
-        nil
-    end
     def authenticate email, pass, expire=nil
         email.downcase!
+        email = email.split("@")[0]
         user = User.get(email)
         authed = false
         if !user.nil? && user.password==pass
             authed = true
         else
-            b = Curl.post('https://moodle2.universityprep.org/login/index.php',{username:username,password:password,rememberusername:'1'})
+            b = Curl.post('https://moodle2.universityprep.org/login/index.php',{username:email,password:pass,rememberusername:'1'})
             if b.body_str.include? 'This page should automatically redirect.'
                 if user.nil?
-                    User.create
-                $redis.set "password:#{username}", hashed_password
+                    User.create(username:email,password:pass)
+                else
+                    user.password = pass
+                    user.save
+                end
                 authed = true
             end
         end            
@@ -112,6 +106,10 @@ helpers do
     end
 end
 
+helpers Helpers
+configure do
+    use Rack::Session::Cookie, :expire_after => 60*60*24*7, :secret => "this is hopefully secret"
+end
 get '/' do
     erb :index
 end
@@ -124,6 +122,57 @@ get '/user/:user/picture' do
     student.picture
 end
 
-get '/article/:article' do
-    @article = param['article']
+get '/article/new' do
+    editor_required!
+    erb :article_new
 end
+
+post '/article/:article' do
+    editor_required!
+    document = Article.get params["article"].to_i
+    response = {status:'success'}
+    if params["article"]=="new"
+        document = Article.new user:current_user
+    end
+    puts params.inspect
+    document.title = params["title"]
+    document.body = params["body"]
+    document.image = params["image"]
+    document.save
+    response[:id] = document.id
+    JSON.dump response
+end
+
+get '/article/:article' do
+    @article = Article.get(params['article'].to_i)
+    if !editor? && !@article.published
+        redirect '/'
+    end
+    erb :article
+end
+
+get '/login' do
+    if !logged_in?
+        erb :login
+    else
+        redirect '/'
+    end
+end
+post '/login' do
+    redirect_loc = '/'
+    if params[:redirect]!=''
+        redirect_loc = params[:redirect]
+    end
+    if authenticate params[:email],params[:password]
+        redirect redirect_loc
+    else
+        redirect "/login?#{redirect_loc}"
+    end
+end
+get '/logout' do
+    if logged_in?
+        logout
+    end
+    redirect '/login'
+end
+
