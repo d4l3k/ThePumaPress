@@ -3,7 +3,7 @@
 
 <section id="coverflow_wrapper">
     <div id="coverflow">
-        <% Article.all.each do |art| %>
+        <% Article.all(published:true).each do |art| %>
             <div data-id=<%= art.id %> data-title="<%= art.title %>">
                 <div style="background-image: url('<%= art.image %>')">
                     <div>
@@ -23,7 +23,7 @@
 
 </section>
 <script>
-var defaultItem = <%= Article.all.length/2.floor %>;
+var defaultItem = Math.floor($("#coverflow").children().length/2);
 $("#coverflow").coverflow({
      item: defaultItem,
      duration:1200,
