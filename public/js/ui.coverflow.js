@@ -52,7 +52,7 @@
 			this.props = o.orientation == 'vertical' ? ['height', 'Height', 'top', 'Top'] : ['width', 'Width', 'left', 'Left'];
 			//For < 1.8.2: this.items['outer'+this.props[1]](1);
 			
-			this.itemSize = 0.73 * this.items.innerWidth();
+			this.itemSize = this.items.innerWidth(); // * 0.73 
 			this.itemWidth = this.items.width();
 			this.itemHeight = this.items.height();
 			this.duration = o.duration;
@@ -161,11 +161,12 @@
 				}else{
 	
 					//css[vendorPrefix + 'Transform'] = 'matrix(1,'+(mod * (side == 'right' ? -0.2 : 0.2))+',0,1,0,0) scale('+(1+((1-mod)*0.3)) + ')';
+                    $("#coverflow").css({'perspective-origin':'300px 130px'})
                     if(side=="right"){
-                        css[vendorPrefix + "TransformOrigin"] = '100% 50% 0';
+                        //css[vendorPrefix + "TransformOrigin"] = '50% 50% 0';
                         css[vendorPrefix + "Transform"] = 'rotateY(' + (mod*10) +'deg)';
                     } else {
-                        css[vendorPrefix + "TransformOrigin"] = '0% 50% 0';
+                        //css[vendorPrefix + "TransformOrigin"] = '50% 50% 0';
                         css[vendorPrefix + "Transform"] = 'rotateY(' + (mod*-10) +'deg)';
                     }
 					css[self.props[2]] = ( (-i * (self.itemSize/2)) + (side == 'right'? -self.itemSize/2 : self.itemSize/2) * mod );

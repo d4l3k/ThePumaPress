@@ -1,7 +1,7 @@
 require 'bundler'
 Bundler.require
 
-DataMapper.setup(:default, 'postgres://postgres:@192.168.1.152/websync')
+DataMapper.setup(:default, 'postgres://postgres:@192.168.1.152/pumapress')
 
 class Article
   include DataMapper::Resource
@@ -54,7 +54,13 @@ module Helpers
         not c_user.nil? and c_user.access_level=="editor"
     end
     def logged_in?
-        (!session['userhash'].nil?)&&UserHash.get(session['userhash']).value==session['user']
+        if !session['userhash'].nil?
+            user = UserHash.get(session['userhash'])
+            if !user.nil?
+                return user.value==session['user']
+            end
+        end
+        false
     end
     def login_required
         if !logged_in?

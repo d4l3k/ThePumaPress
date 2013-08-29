@@ -14,7 +14,7 @@
         }
         hr {
             width: 940px;
-            height: 16px;
+            height: 1px;
             background-color: #114566;
             margin: 16 auto;
         }
@@ -34,34 +34,54 @@
             width: 100%;
             overflow: hidden;
             position: relative;
-            height: 500px;
+            height: 450px;
         }
         #coverflow {
             display: inline-block;
             height: 600px;
             width: 2600px;
             position: absolute;
-            padding: 42px;
             top: 0px;
             left: 0px;
-            margin-top: 50px;
+            margin-top: 25px;
             -webkit-perspective: 35em;
         }
 
-        #coverflow img {
-            width: 260px;
-            height: 260px;
+        #coverflow > div {
+            width: 320px;
+            height: 320px;
             float: left;
             position: relative;
-            margin: -35px;
-             -webkit-box-reflect: below 8px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(.7, transparent), to(rgba(0,0,0,0.4)));
+            //margin: -35px;
 
+            box-shadow: 0 0 32px black;
         }
-            
+        #coverflow > div > div {
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            -moz-background-size: cover;
+            height: 100%;
+            width: 100%;
+             -webkit-box-reflect: below 24px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(.8, transparent), to(rgba(0,0,0,0.3)));
+        }
+        #coverflow > div > div > div {
+            position: relative;
+            margin: 0 auto;
+            text-align: center;
+            top: 100%;
+        }
+        #slider {
+            width: 520px;
+            margin: 0 auto;
+            position: relative;
+            top: 400px;
+        }
     </style>
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
     <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
     <script src="/js/nprogress.js"></script>
     <link href="/css/nprogress.css" rel="stylesheet" type="text/css">
 </head>

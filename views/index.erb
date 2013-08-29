@@ -4,9 +4,16 @@
 <section id="coverflow_wrapper">
     <div id="coverflow">
         <% Article.all.each do |art| %>
-            <img src="<%= art.image %>" data-id=<%= art.id %> data-title="<%= art.title %>"></img>
+            <div data-id=<%= art.id %> data-title="<%= art.title %>">
+                <div style="background-image: url('<%= art.image %>')">
+                    <div>
+                        <%= art.title %>
+                    </div>
+                </div>
+            </div>
         <% end %>
     </div>
+    <div id="slider"></div>
 </section>
 <hr>
 <section id="social" class="container">
@@ -16,13 +23,22 @@
 
 </section>
 <script>
+var defaultItem = <%= Article.all.length/2.floor %>;
 $("#coverflow").coverflow({
-     item: 5,
+     item: defaultItem,
      duration:1200,
      select: function(event, sky)
      {
-        console.log(sky,event);
-        //skipTo(sky.value);
+        console.log($(sky.item).data());
+        $("#slider").slider( "option", "value", sky.value);        
      }
  });
+ $("#slider").slider({
+     min: 0,
+     max: $('#coverflow > *').length-1,
+     value: defaultItem,
+     slide: function(event, ui) {
+         $("#coverflow").coverflow('select', ui.value, true);
+     }
+ });        
 </script>
