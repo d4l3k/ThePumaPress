@@ -29,7 +29,6 @@ function editor_disable(){
 }
 $(document).ready(function(){
     $("#save").click(function(){
-        editor_disable();
         var headline = $("h1.editable").text();
         var content = $("div.editable").html();
         var image = $("div.editable img")[0].src;
@@ -38,6 +37,20 @@ $(document).ready(function(){
         $.post(window.location.pathname, {title:headline,body:content,image:image}, function(data) {
             json = JSON.parse(data);
             window.history.pushState({},"","/article/"+json.id);
+            editor_disable();
+            NProgress.done();
+        });
+    });
+    $("#publish").click(function(){
+        var publish = $("#publish").text()=="Publish";
+        NProgress.start();
+        $.post(window.location.pathname, {published:publish}, function(data) {
+            json = JSON.parse(data);
+            if(publish){
+                $("#publish").text("Unpublish")
+            } else {
+                $("#publish").text("Publish")
+            }
             NProgress.done();
         });
     });
@@ -47,6 +60,9 @@ $(document).ready(function(){
     h1.editable:empty {
     }
     div.editable:empty {
+    }
+    div.buttons {
+        float:right;
     }
 </style>
 <div id="fb-root"></div>
@@ -59,6 +75,17 @@ $(document).ready(function(){
 }(document, 'script', 'facebook-jssdk'));</script>
 
 <section class="container">
+    <% if editor? %>
+        <div class="buttons">
+            <button id="edit" onclick="editor_enable()">Edit</button>
+            <button id="save" style="display: none;">Save</button>
+            <% if @article && @article.published %>
+                <button id="publish">Unpublish</button>
+            <% else %>
+                <button id="publish">Publish</button>
+            <% end %>
+        </div>
+    <% end %>
     <% if @article %>
         <h1 class="editable"><%= @article.title %></h1>
         <div class="editable" style="width:100%;"><%= @article.body %></div>
@@ -67,11 +94,6 @@ $(document).ready(function(){
         <h1 class="editable">Have a Headline</h1>
         <div class="editable" style="width:100%;">And some content.</div>
         <title>New Article - The Puma Press</title>
-    <% end %>
-    <% if editor? %>
-        <button id="edit" onclick="editor_enable()">Edit</button>
-        <button id="save" style="display: none;">Save</button>
-        <button id="publish">Publish</button>
     <% end %>
 </section>
 <% if @article %>

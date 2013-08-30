@@ -3,6 +3,25 @@ Bundler.require
 
 DataMapper.setup(:default, 'postgres://postgres:@192.168.1.152/pumapress')
 
+require 'sinatra/asset_pipeline'
+set :assets_precompile, %w(default.css default.js *.png *.jpg *.svg *.eot *.ttf *.woff)
+
+# Logical path to your assets
+set :assets_prefix, 'assets'
+
+# Use another host for serving assets
+#set :assets_host, '<id>.cloudfront.net'
+
+# Serve assets using this protocol
+#set :assets_protocol, :http
+
+# CSS minification
+set :assets_css_compressor, :sass
+
+# JavaScript minification
+set :assets_js_compressor, :uglifier
+register Sinatra::AssetPipeline
+
 class Article
   include DataMapper::Resource
     property :id,         Serial
@@ -11,7 +30,14 @@ class Article
     property :body,       Text, :default => ''
     property :published,  Boolean, :default => false
     property :published_on, DateTime
-    belongs_to :user
+    belongs_to :category
+end
+
+class Category
+    include DataMapper::Resource
+    property :name,         String, key:true
+    property :description,  Text
+    has n, :articles
 end
 
 class User
@@ -25,7 +51,6 @@ class User
     property :about, Text, :default => ""
     property :picture, Text, :default => ""
     property :password, BCryptHash
-    has n, :articles
 end
 
 class UserHash
@@ -136,16 +161,25 @@ end
 post '/article/:article' do
     editor_required!
     document = Article.get params["article"].to_i
-    response = {status:'success'}
+    response = {}
     if params["article"]=="new"
-        document = Article.new user:current_user
+        document = Article.new #user:current_user
     end
-    puts params.inspect
-    document.title = params["title"]
-    document.body = params["body"]
-    document.image = params["image"]
-    document.save
+    if params["title"]
+        document.title = params["title"]
+    end
+    if params["body"]
+        document.body = params["body"]
+    end
+    if params["image"]
+        document.image = params["image"]
+    end
+    if params["published"]
+        document.published = params["published"]=='true'
+    end
+    saved = document.save
     response[:id] = document.id
+    response[:saved] = saved
     JSON.dump response
 end
 

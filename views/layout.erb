@@ -1,94 +1,30 @@
 <head>
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
-    <style>
-        * {
-            font-family: 'Lato', sans-serif;
-        }
-        body {
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            width: 940px;
-            margin: 0 auto;
-        }
-        hr {
-            width: 940px;
-            height: 1px;
-            background-color: #114566;
-            margin: 16 auto;
-        }
-        .container {
-            width: 940px;
-            margin: 0 auto;
-        }
-        #social.container > iframe {
-            width: 462px;
-            height: 600px;
-            float: left;
-        }
-        #social.container > iframe:nth-child(2) {
-            float: right;
-        }
-        #coverflow_wrapper {
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-            height: 450px;
-        }
-        #coverflow {
-            display: inline-block;
-            height: 600px;
-            width: 2600px;
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            margin-top: 25px;
-            -webkit-perspective: 35em;
-        }
-
-        #coverflow > div {
-            width: 320px;
-            height: 320px;
-            float: left;
-            position: relative;
-            //margin: -35px;
-
-            box-shadow: 0 0 32px black;
-        }
-        #coverflow > div > div {
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            -moz-background-size: cover;
-            height: 100%;
-            width: 100%;
-             -webkit-box-reflect: below 24px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(.8, transparent), to(rgba(0,0,0,0.3)));
-        }
-        #coverflow > div > div > div {
-            position: relative;
-            margin: 0 auto;
-            text-align: center;
-            top: 100%;
-        }
-        #slider {
-            width: 520px;
-            margin: 0 auto;
-            position: relative;
-            top: 400px;
-        }
-    </style>
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
-    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
-    <script src="/js/nprogress.js"></script>
-    <link href="/css/nprogress.css" rel="stylesheet" type="text/css">
+    <%= stylesheet_tag 'default' %>
+    <%= javascript_tag "default" %>
 </head>
 <body>
     <header>
-        <a href="/"><img src="/logo.jpg"></img></a>
+        <a href="/"><img src="<%= image_path "logo.jpg" %>"></img></a>
+        <section class="nav_bar">
+            <ul>
+                <% Category.all.each do |cat| %>
+                    <li><a href="/category/<%= cat.name %>"><%= cat.name.upcase %></a></li>
+                <% end %>
+                <li>
+                    <form class="search" action="/search" method="get">
+                        <input type="text" placeholder="SEARCH" name="q"/>                        
+                    </form>
+                </li>
+                <li class="icon">
+                    <a href="https://www.facebook.com/pages/Puma-Press/146302839666">
+                        <i class="icon-facebook-sign"></i>
+                    </a>
+                    <a href="https://twitter.com/thepumapress">
+                        <i class="icon-twitter-sign"></i>
+                    </a>
+                </li>
+            </ul>
+        </section>
     </header>
-    <hr>
     <%= yield %>
 </body>
