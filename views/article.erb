@@ -20,21 +20,26 @@ function editor_enable(){
     });
     $("#save").show();
     $("#publish, #edit").hide();
+    $("select.category").show();
+    $("a.category").hide();
 }
 function editor_disable(){
     tinymce.remove("h1.editable");
     tinymce.remove("div.editable");
     $("#save").hide();
+    $("select.category").hide();
+    $("a.category").text($("select.category").val()).show();
     $("#publish, #edit").show();
 }
 $(document).ready(function(){
     $("#save").click(function(){
         var headline = $("h1.editable").text();
         var content = $("div.editable").html();
-        var image = $("div.editable img")[0].src;
+        var image = $("div.editable img").attr("src");
+        var category = $("select.category").val();
         document.title = headline+" - The Puma Press";
         NProgress.start();
-        $.post(window.location.pathname, {title:headline,body:content,image:image}, function(data) {
+        $.post(window.location.pathname, {title:headline,body:content,image:image,category:category}, function(data) {
             json = JSON.parse(data);
             window.history.pushState({},"","/article/"+json.id);
             editor_disable();
@@ -47,9 +52,12 @@ $(document).ready(function(){
         $.post(window.location.pathname, {published:publish}, function(data) {
             json = JSON.parse(data);
             if(publish){
-                $("#publish").text("Unpublish")
+                $("#publish").text("Unpublish");
+                var date = new Date();
+                $("#published").removeClass("not").text("Published: "+date.strftime("%B %e, %Y"));
             } else {
-                $("#publish").text("Publish")
+                $("#publish").text("Publish");
+                $("#published").text("Published: Not Published").addClass("not");
             }
             NProgress.done();
         });
@@ -63,6 +71,7 @@ $(document).ready(function(){
     }
     div.buttons {
         float:right;
+        margin: 0.83em;
     }
 </style>
 <div id="fb-root"></div>
@@ -79,19 +88,37 @@ $(document).ready(function(){
         <div class="buttons">
             <button id="edit" onclick="editor_enable()">Edit</button>
             <button id="save" style="display: none;">Save</button>
-            <% if @article && @article.published %>
-                <button id="publish">Unpublish</button>
-            <% else %>
-                <button id="publish">Publish</button>
+            <% if editor? %>
+                <% if @article && @article.published %>
+                    <button id="publish">Unpublish</button>
+                <% else %>
+                    <button id="publish">Publish</button>
+                <% end %>
             <% end %>
         </div>
     <% end %>
     <% if @article %>
+        <select class="category" style="display: none;">
+            <% Category.all.each do |cat| %>
+                <option <%= (cat.name==@article.category.name)?"selected":"" %>><%= cat.name %></option>
+            <% end %>
+        </select>
+        <a class="category" href="/category/<%= @article.category.name %>"><%= @article.category.name %></a>
+        <span class="slash">&#151;</span>
         <h1 class="editable"><%= @article.title %></h1>
+        <div id="published" class="<%= @article.published ? "" : "not" %>">Published: <%= @article.published ? @article.published_on.strftime("%B %e, %Y") : "Not Published" %></div>
         <div class="editable" style="width:100%;"><%= @article.body %></div>
         <title><%= @article.title %> - The Puma Press</title>
     <% else %>
+        <select class="category" style="display: none;">
+            <% Category.all.each do |cat| %>
+                <option><%= cat.name %></option>
+            <% end %>
+        </select>
+        <a class="category" href="/category/<%= Category.first.name %>"><%= Category.first.name %></a>
+        <span class="slash">&#151;</span>
         <h1 class="editable">Have a Headline</h1>
+        <div id="published" class="not">Published: Not Published</div>
         <div class="editable" style="width:100%;">And some content.</div>
         <title>New Article - The Puma Press</title>
     <% end %>

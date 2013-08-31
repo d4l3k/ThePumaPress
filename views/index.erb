@@ -1,14 +1,13 @@
-
-<script src="js/ui.coverflow.js"></script>
+<title>The Puma Press - University Prep's Student Newspaper</title>
 
 <section id="coverflow_wrapper">
     <div id="coverflow">
         <% Article.all(published:true).each do |art| %>
             <div data-id=<%= art.id %> data-title="<%= art.title %>">
                 <div style="background-image: url('<%= art.image %>')">
-                    <div>
+                    <a href="/article/<%= art.id %>">
                         <%= art.title %>
-                    </div>
+                    </a>
                 </div>
             </div>
         <% end %>

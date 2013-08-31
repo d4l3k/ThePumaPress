@@ -44,9 +44,10 @@ class User
     include DataMapper::Resource
     property :username,       String, :key => true
     # Access levels are:
-    # user
-    # editor
-    property :access_level,   String, :default => 'user'
+    # user - 0
+    # author - 50
+    # editor - 100
+    property :rank,   Integer, :default => 0
     property :name, String, :default => ""
     property :about, Text, :default => ""
     property :picture, Text, :default => ""
@@ -69,14 +70,23 @@ module Helpers
         end
         nil
     end
+    def author_required!
+        if not author?
+            redirect "/"
+        end
+    end
     def editor_required!
         if not editor?
             redirect "/"
         end
     end
+    def author?
+        c_user = current_user
+        not c_user.nil? and c_user.rank>=50
+    end
     def editor?
         c_user = current_user
-        not c_user.nil? and c_user.access_level=="editor"
+        not c_user.nil? and c_user.rank>=100
     end
     def logged_in?
         if !session['userhash'].nil?
@@ -154,7 +164,7 @@ get '/user/:user/picture' do
 end
 
 get '/article/new' do
-    editor_required!
+    author_required!
     erb :article_new
 end
 
@@ -171,11 +181,15 @@ post '/article/:article' do
     if params["body"]
         document.body = params["body"]
     end
+    if params["category"]
+        document.category = Category.get(params["category"])
+    end
     if params["image"]
         document.image = params["image"]
     end
-    if params["published"]
+    if params["published"] and editor?
         document.published = params["published"]=='true'
+        document.published_on = DateTime.now
     end
     saved = document.save
     response[:id] = document.id
@@ -185,7 +199,7 @@ end
 
 get '/article/:article' do
     @article = Article.get(params['article'].to_i)
-    if !editor? && !@article.published
+    if !author? && !@article.published
         redirect '/'
     end
     erb :article

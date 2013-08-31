@@ -1,3 +1,5 @@
+$blue: #15355e;
+
 * {
     font-family: 'Lato', sans-serif;
 }
@@ -46,13 +48,14 @@ hr {
 }
 
 #coverflow > div {
-    width: 320px;
+    width: 380px;
     height: 320px;
     float: left;
     position: relative;
     //margin: -35px;
     cursor: pointer;
     box-shadow: 0 0 32px black;
+    background-color: white;
 }
 #coverflow > div > div {
     background-position: center center;
@@ -63,11 +66,22 @@ hr {
     width: 100%;
      -webkit-box-reflect: below 24px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(.8, transparent), to(rgba(0,0,0,0.3)));
 }
-#coverflow > div > div > div {
+#coverflow > div > div > a {
     position: relative;
-    margin: 0 auto;
-    text-align: center;
-    top: 100%;
+    width: 362px;
+    height: 36px;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    font-weight: bold;
+    padding: 0 9px;
+    font-size: 18px;
+    line-height: 36px;
+    top: 284px;
+    display: block;
+    text-decoration: none;
+    &:hover {
+        color: darken(white,30%);
+    }
 }
 #slider {
     width: 520px;
@@ -78,68 +92,97 @@ hr {
 .nav_bar {
     margin: 10px 0;
     width: 100%;
-    background-color: #15355e;
+    background-color: $blue;
     color: white;
     height: 36px;
-}
-.nav_bar > ul > * {
-    margin: 0 10px;
-}
-.nav_bar a {
-    color: white;
-    font-size: 18px;
-    text-decoration: none;
-    font-weight: bold;
-    line-height:36px
-}
-.nav_bar a:hover {
-    color: #999999;
-}
-.nav_bar li {
-    display: inline-block;
-}
-.nav_bar li.icon {
-    margin-top: -20px;
-}
-.nav_bar li.icon a {
-    font-size: 28px;
-    height: 18px;
-    margin-top: -20px;
-    position: relative;
-    top: 3px;
-}
-.nav_bar li.icon a i {
-    line-height: 36px;
+    & > ul > * {
+        margin: 0 10px;
+    }
+    a {
+        color: white;
+        font-size: 18px;
+        text-decoration: none;
+        font-weight: bold;
+        line-height:36px;
+        &:hover {
+            color: darken(white,30%);
+        }
+    }
+    li {
+        display: inline-block;
+        &.icon {
+            margin-top: -20px;
+            a {
+                font-size: 28px;
+                height: 18px;
+                margin-top: -20px;
+                position: relative;
+                top: 3px;
+                i {
+                    line-height: 36px;
+                }
+
+            }
+
+        }
+    }
 }
 .search {
+    input {
+        border-radius: 3px;
+        border: none;
+        padding: 1px 5px;
+        font-size: 18px;
+        width: 120px;
+        -moz-transition:width 0.5s;
+        -webkit-transition:width 0.5s;
+        -o-transition:width 0.5s;
+        transition:width 0.5s;
+        &:focus {
+            width: 250px;
+        }
+        &::-webkit-input-placeholder {
+           font-weight: bold;
+           font-size: 18px;
+        }
+        &:-moz-placeholder { /* Firefox 18- */
+           font-weight: bold;
+           font-size: 18px;
+        }
+        &::-moz-placeholder {  /* Firefox 19+ */
+           font-weight: bold;
+           font-size: 18px;
+        }
+        &:-ms-input-placeholder {  
+           font-weight: bold;
+           font-size: 18px;
+        }
+    }
 }
-.search input {
-    border-radius: 3px;
-    border: none;
-    padding: 1px 5px;
-    font-size: 18px;
-    width: 81px;
-    -moz-transition:width 0.5s;
-    -webkit-transition:width 0.5s;
-    -o-transition:width 0.5s;
-    transition:width 0.5s;
+.category {
+    font-size: 1.5em;
+    font-weight: bold;
 }
-.search input:focus {
-    width: 250px;
+a.category {
+    text-decoration: none;
+    color: $blue;
+    &:hover {
+        color: lighten($blue,30%);
+    }
 }
-.search input::-webkit-input-placeholder {
-   font-weight: bold;
-   font-size: 18px;
+h1.editable {
+    display: inline-block;
+    min-width: 200px;
 }
-.search input:-moz-placeholder { /* Firefox 18- */
-   font-weight: bold;
-   font-size: 18px;
+.slash {
+    font-weight: bold;
+    font-size: 1.5em;
+    margin: 0 10px;
 }
-.search input::-moz-placeholder {  /* Firefox 19+ */
-   font-weight: bold;
-   font-size: 18px;
-}
-.search input:-ms-input-placeholder {  
-   font-weight: bold;
-   font-size: 18px;
+#published {
+    font-style: italic;
+    font-size: 0.8em;
+    &.not {
+        color: red;
+    }
 }
