@@ -99,6 +99,7 @@
                             <ul>
                                  <% if logged_in? %>
                                     <li><a href="/logout">Logout</a></li>
+                                    <li><a href="/user/<%= current_user.username %>">Edit My Profile</a></li>
                                     <li><a href="/article/new">New Article</a></li>
                                     <% if editor? %>
                                         <li><a href="/category/unpublished">Unpublished Articles</a></li>

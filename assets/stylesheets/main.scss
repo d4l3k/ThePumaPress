@@ -227,18 +227,21 @@ footer {
             border: none;
             span {
                 border-bottom: 1px solid white;
-                width: 170px;
+                //width: 170px;
                 font-weight: bold;
-                padding: 5px 0;
+                padding: 5px 9px;
                 display: inline-block;
             }
             tbody {
                 td {
                     vertical-align: top;
+                    text-align: center;
                 }
                 ul {
-                    width: 130px;
-                    margin: 0 auto;
+                    display: inline-block;
+                    margin: 0;
+                    padding: 0;
+                    text-align: left;
                     a {
                         color: white;
                         text-decoration: none;

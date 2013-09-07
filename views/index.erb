@@ -46,8 +46,16 @@ function rotatePost() {
         $("#pic, #msg").fadeIn();
     }});
 }
+var interval = setInterval(function(){
+    var twitter_posts = $("#twitter_feeds li")
+    if(twitter_posts.length > 0){
+        clearInterval(interval);
+        rotatePost();
+        setInterval(rotatePost,7500);
+    }
+},100);
 
-setInterval(rotatePost,7500);
+
 </script>
 <img id="pic" src=""></img>
 <span id="msg"></span>
