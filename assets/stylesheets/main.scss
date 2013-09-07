@@ -233,13 +233,14 @@ footer {
                     vertical-align: top;
                 }
                 ul {
-                    width: 150px;
+                    width: 170px;
                     margin: 0 auto;
                     a {
                         color: white;
                         text-decoration: none;
                         &:hover {
                             color: darken(white,30%);
+                            text-decoration: underline;
                         }
                     }
                 }

@@ -41,6 +41,9 @@
                             <span>Categories</span>
                         </th>
                         <th>
+                            <span>Social Media</span>
+                        </th>
+                        <th>
                             <span>Authors and Editors</span>
                         </th>
                     </tr>
@@ -60,6 +63,12 @@
                                 <% Category.all.each do |cat| %>
                                     <li><a href="/category/<%= cat.name %>"><%= cat.name %></a></li>
                                 <% end %>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li><a href="https://www.facebook.com/pages/Puma-Press/146302839666">Facebook</a></li>
+                                <li><a href="https://twitter.com/thepumapress">Twitter</a></li>
                             </ul>
                         </td>
                         <td>
