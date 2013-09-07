@@ -67,7 +67,9 @@
                                  <% if logged_in? %>
                                     <li><a href="/logout">Logout</a></li>
                                     <li><a href="/article/new">New Article</a></li>
-                                    <li><a href="/category/unpublished">Unpublished Articles</a></li>
+                                    <% if editor? %>
+                                        <li><a href="/category/unpublished">Unpublished Articles</a></li>
+                                    <% end %>
                                  <% else %>
                                     <li><a href="/login">Login</a></li>
                                  <% end %>

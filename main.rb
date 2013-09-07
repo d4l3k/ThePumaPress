@@ -31,6 +31,12 @@ class Article
     property :published,  Boolean, :default => false
     property :published_on, DateTime
     belongs_to :category
+    def image_path
+        if self.image.length==0
+            return "http://www.universityprep.org/z_img/logo-uprep.png"
+        end
+        self.image
+    end
 end
 
 class Category
@@ -196,8 +202,25 @@ post '/article/:article' do
     response[:saved] = saved
     JSON.dump response
 end
+class CategoryUnpublished
+    def articles
+        Article.all published:false
+    end
+    def description
+        "All unpublished articles are listed here."
+    end
+    def name
+        "Unpublished Articles"
+    end
+end
 get '/category/:category' do
-    @category = Category.get(params['category'])
+    category_name = params['category']
+    if category_name=="unpublished"
+        editor_required!
+        @category = CategoryUnpublished.new
+    else
+        @category = Category.get(params['category'])
+    end
     if !@category
         redirect '/'
     end
