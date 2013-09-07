@@ -3,28 +3,82 @@
     <%= javascript_tag "default" %>
 </head>
 <body>
-    <header>
-        <a href="/"><img src="<%= image_path "logo.jpg" %>"></img></a>
-        <section class="nav_bar">
-            <ul>
-                <% Category.all.each do |cat| %>
-                    <li><a href="/category/<%= cat.name %>"><%= cat.name.upcase %></a></li>
-                <% end %>
-                <li>
-                    <form class="search" action="/search" method="get">
-                        <input type="search" placeholder="SEARCH" name="q" results=10/>                        
-                    </form>
-                </li>
-                <li class="icon">
-                    <a href="https://www.facebook.com/pages/Puma-Press/146302839666">
-                        <i class="icon-facebook-sign"></i>
-                    </a>
-                    <a href="https://twitter.com/thepumapress">
-                        <i class="icon-twitter-sign"></i>
-                    </a>
-                </li>
-            </ul>
+    <div class="wrapper">
+        <header>
+            <a href="/"><img src="<%= image_path "logo.jpg" %>"></img></a>
+            <section class="nav_bar">
+                <ul>
+                    <% Category.all.each do |cat| %>
+                        <li><a href="/category/<%= cat.name %>"><%= cat.name.upcase %></a></li>
+                    <% end %>
+                    <li>
+                        <form class="search" action="/search" method="get">
+                            <input type="search" placeholder="SEARCH" name="q" results=10/>                        
+                        </form>
+                    </li>
+                    <li class="icon">
+                        <a href="https://www.facebook.com/pages/Puma-Press/146302839666">
+                            <i class="icon-facebook-sign"></i>
+                        </a>
+                        <a href="https://twitter.com/thepumapress">
+                            <i class="icon-twitter-sign"></i>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+        </header>
+        <%= yield %>
+    </div>
+    <footer>
+        <section class="container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <span>University Prep</span>
+                        </th>
+                        <th>
+                            <span>Categories</span>
+                        </th>
+                        <th>
+                            <span>Authors and Editors</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <ul>
+                                <li><a href="http://www.universityprep.org">Homepage</a></li>
+                                <li><a href="http://www.universityprep.org/about">About</a></li>
+                                <li><a href="http://universityprep.schoology.com">Schoology</a></li>
+                                <li><a href="http://outlook.office365.com">Webmail</a></li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <% Category.all.each do |cat| %>
+                                    <li><a href="/category/<%= cat.name %>"><%= cat.name %></a></li>
+                                <% end %>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                 <% if logged_in? %>
+                                    <li><a href="/logout">Logout</a></li>
+                                    <li><a href="/article/new">New Article</a></li>
+                                    <li><a href="/category/unpublished">Unpublished Articles</a></li>
+                                 <% else %>
+                                    <li><a href="/login">Login</a></li>
+                                 <% end %>
+                            </ul>
+                        </td>
+                    <tr>
+                </tbody>
+            </table>
         </section>
-    </header>
-    <%= yield %>
+        <section class="copyright">
+            <a href="http://tristanrice.name">© 2013 Tristan Rice</a>
+        </section>
+    </footer>
 </body>

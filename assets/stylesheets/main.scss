@@ -6,6 +6,7 @@ $blue: #15355e;
 body {
     margin: 0;
     padding: 0;
+    min-height: 100%;
 }
 header {
     width: 100%;
@@ -20,6 +21,9 @@ hr {
 .container {
     width: 940px;
     margin: 0 auto;
+}
+#social {
+    height: 600px;
 }
 #social.container > iframe {
     width: 462px;
@@ -213,4 +217,58 @@ h1.editable {
             }
         }
     }
+}
+
+footer {
+    width: 100%;
+    background-color: $blue;
+    color: white;
+    margin-top: 16px;
+    padding: 8px 0;
+    section {
+        font-size: 14px;
+        padding: 8px 0;
+        table {
+            width: 100%;
+            color: white;
+            border: none;
+            span {
+                border-bottom: 1px solid white;
+                width: 170px;
+                font-weight: bold;
+                padding: 5px 0;
+                display: inline-block;
+            }
+            tbody {
+                td {
+                    vertical-align: top;
+                }
+                ul {
+                    width: 150px;
+                    margin: 0 auto;
+                    a {
+                        color: white;
+                        text-decoration: none;
+                        &:hover {
+                            color: darken(white,30%);
+                        }
+                    }
+                }
+            }
+        }
+        &.copyright {
+            text-align: center;
+            a {
+                font-size: 14px;
+                text-decoration: none;
+                color: white;
+                &:hover {
+                    color: darken(white,30%);
+                }
+            }
+        }
+    }
+}
+body > .wrapper {
+    min-height: 100%;
 }
