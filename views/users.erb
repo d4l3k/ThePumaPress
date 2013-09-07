@@ -6,6 +6,9 @@
         <a class="user" data-rank=<%= user.rank %> data-username="<%= user.username %>" href="/user/<%= user.username %>">
             <div class="name">
                 <%= user.display_name %>
+                <span class="title">
+                    — <%= user.title %>
+                </span>
             </div>
             <div class="user_options">
                 <select>

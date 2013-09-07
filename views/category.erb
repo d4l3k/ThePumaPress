@@ -1,13 +1,49 @@
+<script src="/js/tinymce/tinymce.min.js"></script>
+<script type="text/javascript">
+function editor_enable(){
+    tinymce.init({
+        selector: "i.editable",
+        inline: true,
+        toolbar: "undo redo",
+        menubar: false
+    });
+
+    $("#save").show();
+    $("#edit").hide();
+}
+function editor_disable(){
+    tinymce.remove("i.editable");
+    $("#save").hide();
+    $("#edit").show();
+}
+$(document).ready(function(){
+    $("#save").click(function(){
+        var desc = $("i.editable").text();
+        NProgress.start();
+        $.post(window.location.pathname, {description: desc}, function(data) {
+            json = JSON.parse(data);
+            editor_disable();
+            NProgress.done();
+        });
+    });
+});
+</script>
 <section class="container">
-    <h1><%= @category.name %></h1>
-    <i><%= @category.description %></i>
+    <% if editor? and !@noedit%>
+        <div class="buttons">
+            <button id="edit" onclick="editor_enable()">Edit</button>
+            <button id="save" style="display: none;">Save</button>
+        </div>
+    <% end %>
+    <h1 class="editable"><%= @category.name %></h1>
+    <i class="editable"><%= @category.description %></i>
     <title><%= @category.name %> - The Puma Press</title>
     <hr>
     <div class="article_well">
     <% @category.articles.each do |article| %>
-        <div style="background-image: url('<%= article.image_path %>')">
-            <a href="/article/<%= article.id %>"><%= article.title %></a>
-        </div>
+        <a href="/article/<%= article.id %>" style="background-image: url('<%= article.image_path %>')">
+            <div><%= article.title %></div>
+        </a>
     <% end %>
     </div>
 </section>

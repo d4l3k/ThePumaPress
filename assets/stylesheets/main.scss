@@ -184,7 +184,7 @@ h1.editable {
     }
 }
 .article_well {
-    div {
+    a {
         width: 250px;
         height: 250px;
         display: inline-block;
@@ -192,7 +192,7 @@ h1.editable {
         background-repeat: no-repeat;
         background-size: cover;
         -moz-background-size: cover;
-        a {
+        div {
             position: relative;
             height: 36px;
             width: 232px;
@@ -205,9 +205,10 @@ h1.editable {
             top: 214px;
             display: block;
             text-decoration: none;
-            &:hover {
-                color: darken(white,30%);
-            }
+
+        }
+        &:hover div {
+            color: darken(white,30%);
         }
     }
 }
@@ -288,8 +289,8 @@ body > .wrapper {
     }
 }
 .user {
-    height: 36px;
-    line-height: 36px;
+    height: 24px;
+    line-height: 24px;
     display: table;
     width: 922px;
     color: black;
@@ -304,6 +305,9 @@ body > .wrapper {
     .name {
         font-weight: bold;
         display: table-cell;
+        .title {
+            font-weight: normal;
+        }
     }
     .user_options {
         display: table-cell;
@@ -361,4 +365,16 @@ body > .wrapper {
 }
 .pull-right {
     float: right;
+}
+.buttons {
+    float: right;
+    margin: 0.83em;
+}
+.editable.mce-content-body {
+    min-height: 20px;
+    min-width: 100px;
+    border: 1px dashed $blue;
+}
+i.editable {
+    display: block;
 }

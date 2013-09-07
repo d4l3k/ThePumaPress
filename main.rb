@@ -181,7 +181,7 @@ get '/article/new' do
 end
 
 post '/article/:article' do
-    editor_required!
+    author_required!
     document = Article.get params["article"].to_i
     response = {}
     if params["article"]=="new"
@@ -224,6 +224,7 @@ get '/category/:category' do
     if category_name=="unpublished"
         editor_required!
         @category = CategoryUnpublished.new
+        @noedit = true
     else
         @category = Category.get(params['category'])
     end
@@ -232,6 +233,24 @@ get '/category/:category' do
         redirect '/'
     end
     erb :category
+end
+post '/category/:category' do
+    editor_required!
+    category = Category.get params["category"]
+    if !category and params["category"] != "new"
+        return ""
+    end
+    response = {}
+    if params["category"]=="new"
+        category = Category.new params["name"]
+    end
+    if params["description"]
+        category.description = params["description"]
+    end
+    saved = category.save
+    response[:name] = category.name
+    response[:saved] = saved
+    JSON.dump response
 end
 get '/article/:article' do
     @article = Article.get(params['article'].to_i)
