@@ -33,7 +33,7 @@ class Article
     belongs_to :category
     def image_path
         if self.image.length==0
-            return "http://www.universityprep.org/z_img/logo-uprep.png"
+            return "http://i.imgur.com/LbwGoRz.jpg"
         end
         self.image
     end
@@ -50,12 +50,13 @@ class User
     include DataMapper::Resource
     property :username,       String, :key => true
     # Access levels are:
-    # user - 0
+    # reader - 0
     # author - 50
     # editor - 100
     property :rank,   Integer, :default => 0
     property :name, String, :default => ""
-    property :about, Text, :default => ""
+    property :title, String, :default => "Reader"
+    property :about, Text, :default => "No description..."
     property :picture, Text, :default => ""
     property :password, BCryptHash
     def display_name
@@ -66,7 +67,7 @@ class User
     end
     def display_picture
         if self.picture.length==0
-            return "http://www.universityprep.org/z_img/logo-uprep.png"
+            return "http://i.imgur.com/LbwGoRz.jpg"
         end
         self.picture
     end
@@ -263,6 +264,9 @@ post '/user/:user' do
     response = {}
     if params["name"]
         user.name = params["name"]
+    end
+    if params["title"]
+        user.title = params["title"]
     end
     if params["about"]
         user.about = params["about"]

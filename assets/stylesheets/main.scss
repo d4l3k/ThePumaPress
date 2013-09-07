@@ -166,10 +166,13 @@ a.category {
 }
 h1.editable {
     display: inline-block;
-    min-width: 200px;
+    min-width: 100px;
+    &#title {
+        font-weight: normal;
+    }
 }
 .slash {
-    font-weight: bold;
+    //font-weight: bold;
     font-size: 1.5em;
     margin: 0 10px;
 }
@@ -330,14 +333,20 @@ body > .wrapper {
     }
 }
 .picture {
-    width: 250px;
-    height: 250px;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    -moz-background-size: cover;
     margin-right: 9px;
     margin-bottom: 9px;
+    a {
+        width: 250px;
+        height: 250px;
+        display: block;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        -moz-background-size: cover;
+    }
+    .picture-upload {
+        width: 250px;
+    }
 }
 .content {
     width: 681px;

@@ -19,29 +19,36 @@ function editor_enable(){
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     });
     $("#save").show();
-    $("#publish, #edit").hide();
-    $("select.category").show();
-    $("a.category").hide();
+    $("#edit").hide();
+    $(".picture-upload").show();
 }
 function editor_disable(){
     tinymce.remove("h1.editable");
     tinymce.remove("div.editable");
     $("#save").hide();
-    $("select.category").hide();
-    $("a.category").text($("select.category").val()).show();
-    $("#publish, #edit").show();
+    $("#edit").show();
+    $(".picture-upload").hide();
 }
 $(document).ready(function(){
     $("#save").click(function(){
-        var name = $("h1.editable").text();
+        var name = $("h1.editable").eq(0).text();
+        var title = $("#title.editable").text();
         var content = $("div.editable").html();
-        //var image = $("div.editable img").attr("src");
+        var image = $(".picture a").attr("href");
         document.title = name+" - The Puma Press";
         NProgress.start();
-        $.post(window.location.pathname, {name:name,about:content}, function(data) {
+        $.post(window.location.pathname, {name:name,about:content, picture:image, title: title}, function(data) {
             json = JSON.parse(data);
             editor_disable();
             NProgress.done();
+        });
+    });
+    $("button:contains('Upload')").click(function(){
+        var input = $(".picture-upload input");
+        var file = input[0].files[0];
+        upload(file,function(a,b){
+            var url = a+".png";
+            $(".picture a").css({"background-image":"url('"+url+"')"}).attr("href",url);
         });
     });
 });
@@ -72,9 +79,17 @@ $(document).ready(function(){
             <button id="save" style="display: none;">Save</button>
         </div>
     <% end %>
-    <a class="picture pull-left" style="background-image: url('<%= @user.display_picture %>')" href="<%= @user.display_picture %>"></a>
+    <div class="picture pull-left">
+        <a style="background-image: url('<%= @user.display_picture %>')" href="<%= @user.display_picture %>"></a>
+        <div class="picture-upload" style="display: none;">
+            <input type="file"></input>
+            <button>Upload</button>
+        </div>
+    </div>
     <div class="content">
         <h1 class="editable"><%= @user.display_name %></h1>
+        <span class="slash">&#151;</span>
+        <h1 id="title" class="editable"><%= @user.title %></h1>
         <div class="editable" style="width:100%;"><%= @user.about %></div>
     </div>
     <title><%= @user.display_name %> - The Puma Press</title>

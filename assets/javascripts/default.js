@@ -16,7 +16,7 @@ function upload(file, callback) {
  
   var fd = new FormData();
   fd.append("image", file); // Append the file
-  fd.append("key", "c55af8f836685598a06bf3410e381826456c369a");
+  fd.append("key", "6528448c258cff474ca9701c5bab6927");
   // Get your own key: http://api.imgur.com/
  
   // Create the XHR (Cross-Domain XHR FTW!!!)
@@ -24,7 +24,7 @@ function upload(file, callback) {
   NProgress.start();
   xhr.open("POST", "http://api.imgur.com/2/upload.json"); // Boooom!
   xhr.upload.onprogress = function(a){
-        console.log(a);
+        NProgress.set(a.position/a.total);
   }
   xhr.onload = function() {
         // Big win!
