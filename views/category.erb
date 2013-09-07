@@ -1,0 +1,13 @@
+<section class="container">
+    <h1><%= @category.name %></h1>
+    <i><%= @category.description %></i>
+    <title><%= @category.name %> - The Puma Press</title>
+    <hr>
+    <div class="article_well">
+    <% @category.articles.each do |article| %>
+        <div style="background-image: url('<%= article.image %>')">
+            <a href="/article/<%= article.id %>"><%= article.title %></a>
+        </div>
+    <% end %>
+    </div>
+</section>

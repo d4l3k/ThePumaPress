@@ -196,15 +196,23 @@ post '/article/:article' do
     response[:saved] = saved
     JSON.dump response
 end
-
+get '/category/:category' do
+    @category = Category.get(params['category'])
+    if !@category
+        redirect '/'
+    end
+    erb :category
+end
 get '/article/:article' do
     @article = Article.get(params['article'].to_i)
-    if !author? && !@article.published
+    if !@article || !author? && !@article.published
         redirect '/'
     end
     erb :article
 end
-
+get '/search' do
+    erb :search
+end
 get '/login' do
     if !logged_in?
         erb :login

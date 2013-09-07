@@ -186,3 +186,31 @@ h1.editable {
         color: red;
     }
 }
+.article_well {
+    div {
+        width: 250px;
+        height: 250px;
+        display: inline-block;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        -moz-background-size: cover;
+        a {
+            position: relative;
+            height: 36px;
+            width: 232px;
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            font-weight: bold;
+            padding: 0 9px;
+            font-size: 18px;
+            line-height: 36px;
+            top: 214px;
+            display: block;
+            text-decoration: none;
+            &:hover {
+                color: darken(white,30%);
+            }
+        }
+    }
+}
