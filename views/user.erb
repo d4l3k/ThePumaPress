@@ -1,0 +1,86 @@
+<script src="/js/tinymce/tinymce.min.js"></script>
+<script type="text/javascript">
+function editor_enable(){
+    tinymce.init({
+        selector: "h1.editable",
+        inline: true,
+        toolbar: "undo redo",
+        menubar: false
+    });
+
+    tinymce.init({
+        selector: "div.editable",
+        inline: true,
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    });
+    $("#save").show();
+    $("#publish, #edit").hide();
+    $("select.category").show();
+    $("a.category").hide();
+}
+function editor_disable(){
+    tinymce.remove("h1.editable");
+    tinymce.remove("div.editable");
+    $("#save").hide();
+    $("select.category").hide();
+    $("a.category").text($("select.category").val()).show();
+    $("#publish, #edit").show();
+}
+$(document).ready(function(){
+    $("#save").click(function(){
+        var name = $("h1.editable").text();
+        var content = $("div.editable").html();
+        //var image = $("div.editable img").attr("src");
+        document.title = name+" - The Puma Press";
+        NProgress.start();
+        $.post(window.location.pathname, {name:name,about:content}, function(data) {
+            json = JSON.parse(data);
+            editor_disable();
+            NProgress.done();
+        });
+    });
+});
+</script>
+<style>
+    h1.editable:empty {
+    }
+    div.editable:empty {
+    }
+    div.buttons {
+        float:right;
+        margin: 0.83em;
+    }
+</style>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<section class="container">
+    <% if editor? or current_user == @user %>
+        <div class="buttons">
+            <button id="edit" onclick="editor_enable()">Edit</button>
+            <button id="save" style="display: none;">Save</button>
+        </div>
+    <% end %>
+    <a class="picture pull-left" style="background-image: url('<%= @user.display_picture %>')" href="<%= @user.display_picture %>"></a>
+    <div class="content">
+        <h1 class="editable"><%= @user.display_name %></h1>
+        <div class="editable" style="width:100%;"><%= @user.about %></div>
+    </div>
+    <title><%= @user.display_name %> - The Puma Press</title>
+</section>
+<% if @user %>
+    <section class="container">
+        <div class="fb-comments" data-href="http://thepumapress.org/user/<%= @user.username %>" data-width="940"></div>
+    </section>
+<% end %>

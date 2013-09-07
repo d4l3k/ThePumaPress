@@ -1,0 +1,37 @@
+<section class="container">
+    <h1>User Management</h1>
+    <title>User Management - The Puma Press</title>
+    <hr>
+    <% User.all.each do |user| %>
+        <a class="user" data-rank=<%= user.rank %> data-username="<%= user.username %>" href="/user/<%= user.username %>">
+            <div class="name">
+                <%= user.display_name %>
+            </div>
+            <div class="user_options">
+                <select>
+                    <option data-rank=0>Viewer</option>
+                    <option data-rank=50 <%= user.rank == 50 ? "selected" : "" %>>Author</option>
+                    <option data-rank=100 <%= user.rank == 100 ? "selected" : "" %>>Editor</option>
+                </select>
+            </div>
+        </a>
+    <% end %>
+    <script>
+$(document).ready(function(){
+    $(".user_options select").change(function(e){
+        var option = this.selectedOptions[0];
+        var root = this.parentElement.parentElement;
+        var user = root.dataset.username;
+        var rank = parseInt(option.dataset.rank);
+        NProgress.start();
+        $.post("/user/"+user, {rank:rank}, function(data) {
+            json = JSON.parse(data);
+            NProgress.done();
+        });
+    }).click(function(e){
+        e.preventDefault();
+    });
+});        
+    </script>
+</section>
+

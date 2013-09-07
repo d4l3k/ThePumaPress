@@ -14,7 +14,7 @@
     </div>
     <div id="slider"></div>
 </section>
-<section id="social" class="container">
+<a id="social">
 <div id="twitter_feeds" style="display: none;"></div>
 <script>
 /*********************************************************************
@@ -42,6 +42,7 @@ function rotatePost() {
     $("#pic, #msg").fadeOut({complete:function(){
         $("#pic").attr("src",post.find("img").attr("src"));
         $("#msg").html(post.find(".tweet").html());
+        $("#social").attr("href",post.find(".user a").attr("href"))
         $("#pic, #msg").fadeIn();
     }});
 }
@@ -50,7 +51,7 @@ setInterval(rotatePost,7500);
 </script>
 <img id="pic" src=""></img>
 <span id="msg"></span>
-</section>
+</a>
 <script>
 var defaultItem = Math.floor($("#coverflow").children().length/2);
 $("#coverflow").coverflow({

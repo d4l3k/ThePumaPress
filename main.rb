@@ -58,6 +58,18 @@ class User
     property :about, Text, :default => ""
     property :picture, Text, :default => ""
     property :password, BCryptHash
+    def display_name
+        if self.name.length > 0
+            return self.name
+        end
+        self.username.upcase
+    end
+    def display_picture
+        if self.picture.length==0
+            return "http://www.universityprep.org/z_img/logo-uprep.png"
+        end
+        self.picture
+    end
 end
 
 class UserHash
@@ -78,11 +90,13 @@ module Helpers
     end
     def author_required!
         if not author?
+            flash[:error] = "ERROR: You need to be an author to access that."
             redirect "/"
         end
     end
     def editor_required!
         if not editor?
+            flash[:error] = "ERROR: You need to be an editor to access that."
             redirect "/"
         end
     end
@@ -160,15 +174,6 @@ end
 get '/' do
     erb :index
 end
-
-get '/user/:user/picture' do
-    student = Student.get(param['user']).picture
-    if student.nil?
-        halt "User not found."
-    end
-    student.picture
-end
-
 get '/article/new' do
     author_required!
     erb :article_new
@@ -222,6 +227,7 @@ get '/category/:category' do
         @category = Category.get(params['category'])
     end
     if !@category
+        flash[:error] = "ERROR: Invalid Category."
         redirect '/'
     end
     erb :category
@@ -229,17 +235,54 @@ end
 get '/article/:article' do
     @article = Article.get(params['article'].to_i)
     if !@article || !author? && !@article.published
+        flash[:error]="ERROR: Article not found."
         redirect '/'
     end
     erb :article
 end
+get '/user/:user' do
+    @user = User.get(params['user'])
+    if !@user
+        flash[:error]="ERROR: User not found."
+    end
+    erb :user
+end
 get '/search' do
     erb :search
+end
+get '/users' do
+    editor_required!
+    erb :users
+end
+post '/user/:user' do
+    user = User.get params["user"]
+    if !(current_user == user or editor?)
+        flash[:error] = "ERROR: Invalid permissions."
+        redirect '/'
+    end
+    response = {}
+    if params["name"]
+        user.name = params["name"]
+    end
+    if params["about"]
+        user.about = params["about"]
+    end
+    if params["picture"]
+        user.picture = params["picture"]
+    end
+    if params["rank"] and editor?
+        user.rank = params["rank"].to_i
+    end
+    saved = user.save
+    response[:username] = user.username
+    response[:saved] = saved
+    JSON.dump response
 end
 get '/login' do
     if !logged_in?
         erb :login
     else
+        flash[:error] = "ERROR: You are already logged in."
         redirect '/'
     end
 end
@@ -249,14 +292,17 @@ post '/login' do
         redirect_loc = params[:redirect]
     end
     if authenticate params[:email],params[:password]
+        flash[:notice]="Successfully logged in."
         redirect redirect_loc
     else
+        flash[:error]="ERROR: Invalid username or password."
         redirect "/login?#{redirect_loc}"
     end
 end
 get '/logout' do
     if logged_in?
         logout
+        flash[:notice]="Successfully logged out."
     end
     redirect '/login'
 end

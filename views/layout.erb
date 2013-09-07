@@ -26,6 +26,30 @@
                     </li>
                 </ul>
             </section>
+
+            <section class="notifications">
+                <% error = flash[:error] 
+                if error %>
+                    <div class="notification error">
+                        <%= error %>
+                    </div>
+                <% end %>
+                <% notice = flash[:notice] 
+                if notice %>
+                    <div class="notification">
+                        <%= notice %>
+                    </div>
+                <% end %>
+            </section>
+            <script>
+                var timeout = setTimeout(function(){
+                    $(".notifications").fadeOut();
+                },10000);
+                $(".notifications").click(function() {
+                    clearTimeout(timeout);
+                    $(".notifications").fadeOut();
+                })
+            </script>
         </header>
         <%= yield %>
     </div>
@@ -78,6 +102,7 @@
                                     <li><a href="/article/new">New Article</a></li>
                                     <% if editor? %>
                                         <li><a href="/category/unpublished">Unpublished Articles</a></li>
+                                        <li><a href="/users">User Managment</a></li>
                                     <% end %>
                                  <% else %>
                                     <li><a href="/login">Login</a></li>
