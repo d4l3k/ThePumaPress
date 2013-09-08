@@ -161,7 +161,9 @@
 				}else{
 	
 					//css[vendorPrefix + 'Transform'] = 'matrix(1,'+(mod * (side == 'right' ? -0.2 : 0.2))+',0,1,0,0) scale('+(1+((1-mod)*0.3)) + ')';
-                    $("#coverflow").css({'perspective-origin':'300px 130px'})
+                    var coverflow_left = $("#coverflow").position().left;
+                    var setup = window.innerWidth/2-coverflow_left
+                    $("#coverflow").css({'perspective-origin':setup.toFixed(1)+'px 130px'})
                     if(side=="right"){
                         //css[vendorPrefix + "TransformOrigin"] = '50% 50% 0';
                         css["transform"] = 'rotateY(' + (mod*10).toFixed(1) +'deg)';
