@@ -50,6 +50,13 @@ class Article
     end
 end
 
+class Staff
+    include DataMapper::Resource
+    property    :year,          String,     key:true
+    property    :description    String
+    has n,      :users,         :through => Resource
+end
+
 class Category
     include DataMapper::Resource
     property :name,         String, key:true
@@ -88,6 +95,7 @@ class User
     property :picture, Text, :default => ""
     property :password, BCryptHash
     has n, :articles, :through => Resource
+    has n, :staff, :through => Resource
     def display_name
         if self.name.length > 0
             return self.name

@@ -1,0 +1,40 @@
+<section class="container">
+    <% if editor? or current_user == @user %>
+        <div class="buttons">
+            <button id="edit" class="normal-mode">Edit</button>
+            <button id="save" class="edit-mode">Save</button>
+        </div>
+    <% end %>
+    <h1>Staff of <%= @staff.year %></h1>
+    <title>Staff of <%= @staff.year %> - The Puma Press</title>
+    <hr>
+    <% @staff.users.each do |@user| %>
+        <div class="picture pull-left">
+            <a style="background-image: url('<%= @user.display_picture %>')" href="<%= @user.display_picture %>"></a>
+        </div>
+        <div class="content">
+            <h1 class="editable"><a href="/user/<%= @user.username %>"><%= @user.display_name %></a></h1>
+            <span class="slash">&#151;</span>
+            <h1 id="title" class="editable"><%= @user.title %></h1>
+            <div class="editable" style="width:100%;"><%= @user.about %></div>
+        </div>        
+    <% end %>
+    <script>
+$(document).ready(function(){
+    $(".user_options select").change(function(e){
+        var option = this.selectedOptions[0];
+        var root = this.parentElement.parentElement;
+        var user = root.dataset.username;
+        var rank = parseInt(option.dataset.rank);
+        NProgress.start();
+        $.post("/user/"+user, {rank:rank}, function(data) {
+            json = JSON.parse(data);
+            NProgress.done();
+        });
+    }).click(function(e){
+        e.preventDefault();
+    });
+});        
+    </script>
+</section>
+
