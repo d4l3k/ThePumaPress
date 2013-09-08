@@ -3,11 +3,21 @@ Bundler.require(:default)
 
 DataMapper.setup(:default, 'postgres://postgres:@192.168.1.152/pumapress')
 
+require 'sprockets/environment'
+require 'sinatra/sprockets-helpers'
 require 'sinatra/asset_pipeline'
-set :assets_precompile, %w(default.css default.js *.png *.jpg *.svg *.eot *.ttf *.woff)
 
+Sinatra::Sprockets = Sprockets
+
+configure do
 # Logical path to your assets
-set :assets_prefix, 'assets'
+    set :assets_precompile, %w(default.css default.js *.png *.jpg *.svg *.eot *.ttf *.woff)
+    set :assets_prefix, 'assets'
+    #sprockets.append_path File.join(root, 'assets', 'stylesheets')
+    #sprockets.append_path File.join(root, 'assets', 'javascripts')
+    #sprockets.append_path File.join(root, 'assets', 'images')
+    register Sinatra::AssetPipeline
+end
 configure :development do
     Bundler.require(:development)
     set :assets_debug, true
@@ -21,7 +31,6 @@ configure :production do
     # JavaScript minification
     set :assets_js_compressor, :closure
 end
-register Sinatra::AssetPipeline
 
 class Article
   include DataMapper::Resource

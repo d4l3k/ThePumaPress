@@ -132,4 +132,5 @@ DEPENDENCIES
   sinatra
   sinatra-asset-pipeline
   sinatra-flash
+  sprockets
   thin

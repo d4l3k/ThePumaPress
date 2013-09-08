@@ -122,7 +122,7 @@ $(document).ready(function(){
                 <option <%= (cat.name==@article.category.name)?"selected":"" %>><%= cat.name %></option>
             <% end %>
         </select>
-        <a class="category" href="/category/<%= @article.category.name %>"><%= @article.category.name %></a>
+        <a class="category normal-mode" href="/category/<%= @article.category.name %>"><%= @article.category.name %></a>
         <span class="slash">&#151;</span>
         <h1 class="editable"><%= @article.title %></h1>
         <br>
@@ -139,12 +139,12 @@ $(document).ready(function(){
         <div class="editable" style="width:100%;"><%= @article.body %></div>
         <title><%= @article.title %> - The Puma Press</title>
     <% else %>
-        <select class="category" style="display: none;">
+        <select class="category edit-mode" style="display: none;">
             <% Category.all.each do |cat| %>
                 <option><%= cat.name %></option>
             <% end %>
         </select>
-        <a class="category" href="/category/<%= Category.first.name %>"><%= Category.first.name %></a>
+        <a class="category normal-mode" href="/category/<%= Category.first.name %>"><%= Category.first.name %></a>
         <span class="slash">&#151;</span>
         <h1 class="editable">Have a Headline</h1>
         <br>
