@@ -35,12 +35,23 @@ $(document).ready(function(){
             <button id="save" style="display: none;">Save</button>
         </div>
     <% end %>
-    <h1 class="editable"><%= @category.name %></h1>
+    <%= @category.html_name %>
     <i class="editable"><%= @category.description %></i>
     <title><%= @category.name %> - The Puma Press</title>
     <hr>
     <div class="article_well">
-    <% @category.articles(published:true, order:[:published_on.desc]).each do |article| %>
+    <% categories = Category.all(name:@category.name)
+    Category.all.each do |cat|
+        index = cat.name.index(@category.name)
+        #categories.inspect
+        #puts "CAT: #{cat.name}, #{index}, #{categories.inspect}"
+        if index==0 && cat.name != @category.name
+            categories.push cat
+        end
+    end
+    # TODO: Figure out why this makes a difference. Without it, only the first category is queried against.
+    categories.inspect
+    categories.articles(published:true, order:[:published_on.desc]).each do |article| %>
         <a href="/article/<%= article.id %>" style="background-image: url('<%= article.image_path %>')">
             <div><%= article.title %></div>
         </a>

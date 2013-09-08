@@ -8,9 +8,29 @@
             <a href="/"><img src="<%= image_path "logo.jpg" %>"></img></a>
             <section class="nav_bar">
                 <ul>
-                    <% Category.all(order:[:index.asc]).each do |cat| %>
-                        <li><a href="/category/<%= cat.name %>"><%= cat.name.upcase %></a></li>
-                    <% end %>
+                    <% Category.all(order:[:index.asc]).each do |cat| 
+                        if not cat.name.include? "/" %>
+                            <li>
+                                <a href="/category/<%= cat.name %>"><%= cat.name.upcase %></a>
+                                <% sub_cat = []
+                                Category.all(order:[:index.asc]).each do |n_cat|
+                                    if n_cat.name.include? '/' and n_cat.name.include? cat.name
+                                        sub_cat.push n_cat
+                                    end
+                                end
+                                if sub_cat.length > 0
+                                %>
+                                    <ul>
+                                        <% sub_cat.each do |s_cat| %>
+                                            <li>
+                                                <a href="/category/<%= s_cat.name %>"><%= s_cat.name.split("/").pop.strip.upcase %></a>
+                                            </li>
+                                        <% end %>
+                                    </ul>
+                                <% end %>
+                            </li>
+                    <%  end
+                    end %>
                     <li>
                         <form class="search" action="/search" method="get">
                             <input type="search" placeholder="SEARCH" name="q" results=10/>                        

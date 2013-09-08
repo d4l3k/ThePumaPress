@@ -122,7 +122,10 @@ $(document).ready(function(){
                 <option <%= (cat.name==@article.category.name)?"selected":"" %>><%= cat.name %></option>
             <% end %>
         </select>
-        <a class="category normal-mode" href="/category/<%= @article.category.name %>"><%= @article.category.name %></a>
+        <!-- <a class="category normal-mode" href="/category/<%= @article.category.name %>"><%= @article.category.name %></a> -->
+        <span class="normal-mode">
+            <%= @article.category.html_name true %>
+        </span>
         <span class="slash">&#151;</span>
         <h1 class="editable"><%= @article.title %></h1>
         <br>

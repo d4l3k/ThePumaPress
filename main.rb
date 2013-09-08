@@ -56,6 +56,22 @@ class Category
     property :description,  Text
     property :index,        Integer, :default => 99999
     has n, :articles
+    def display_name
+        self.name.split("/").map {|n| n.strip }.join(" / ")
+    end
+    def html_name last=false
+        parts = self.name.split("/").map {|n| n.strip}
+        links = []
+        parts.each_with_index do |cat, index|
+            if index == parts.length - 1 and not last
+                links.push "<h1 class='category'>#{cat}</h1>"
+            else
+                url = "/category/#{parts[0..index].join("/")}"
+                links.push "<h1 class='category'><a href='#{url}'>#{cat}</a></h1>"
+            end
+        end
+        links.join "<h1 class='slash category'> / </h1>"
+    end
 end
 
 class User
@@ -247,6 +263,7 @@ post '/categories' do
     editor_required!
     all_categories = Category.all.map {|cat| cat.name}
     params.each do |cat, data|
+        cat = cat.split("/").map {|n| n.strip}.join("/")
         category = Category.first_or_create({name:cat})
         category.index = data["index"].to_i
         category.save

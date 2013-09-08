@@ -99,11 +99,12 @@ hr {
         font-weight: bold;
         line-height:36px;
         &:hover {
-            color: darken(white,30%);
+            color: transparentize(white,0.5);
         }
     }
     li {
         display: inline-block;
+        position: relative;
         &.icon {
             margin-top: -20px;
             a {
@@ -117,7 +118,20 @@ hr {
                 }
 
             }
-
+        }
+        &:hover ul {
+            left: 0;
+        }
+        ul {
+            position: absolute;
+            background: $blue;
+            padding: 3px 8px;
+            margin-left: -9px;
+            list-style: none;
+            left: -99999px;
+            li {
+                border-top: 1px solid white;
+            }
         }
     }
 }
@@ -447,4 +461,22 @@ i.editable {
 }
 .content .articles {
     font-size: 14px;
+}
+h1 {
+    &.category {
+        display: inline-block;
+        font-weight: bold;
+        a {
+            font-weight: bold;
+            text-decoration: none;
+            color: $blue;
+            &:hover {
+                text-decoration: underline;
+                color: transparentize($blue, 0.5);
+            }
+        }
+        &.slash {
+            font-weight: normal;
+        }
+    }
 }

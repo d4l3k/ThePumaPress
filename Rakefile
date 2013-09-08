@@ -3,3 +3,6 @@ require './main'
 
 Sinatra::AssetPipeline::Task.define! Sinatra::Application
 
+task 'pry' do
+    binding.pry
+end
