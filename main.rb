@@ -228,9 +228,10 @@ post '/categories' do
     editor_required!
     all_categories = Category.all.map {|cat| cat.name}
     params.each do |cat, data|
+        category = Category.first_or_create({name:cat})
+        category.index = data["index"].to_i
+        category.save
         all_categories.delete cat
-        category = Category.first_or_create name:cat
-        category.update index:data["index"]
     end
     all_categories.each do |cat|
         Category.get(cat).destroy

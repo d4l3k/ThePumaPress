@@ -1,7 +1,11 @@
 <section class="container">
     <div class="buttons">
+        <span class="edit-controls" style="display: none;">
+            <input id="addText" placeholder="Category Name"></input>
+            <button id="add">Add Category</button>
+            <button id="save">Save</button>
+        </span>
         <button id="edit">Edit</button>
-        <button id="save" style="display: none;">Save</button>
     </div>
     <h1>Category Management</h1>
     <title>Category Management - The Puma Press</title>
@@ -21,7 +25,11 @@
                         <span class="badge badge-inverse">
                             <%= categ.articles.length %>
                         </span>
-                        &nbsp;<i class="icon-reorder" style="display: none;"></i> 
+                        &nbsp;
+                        <span class="edit-controls" style="display: none;">
+                            <button class="delete">Delete</button>
+                            <i class="icon-reorder"></i>
+                        </span>
                     </span>
                 </div>
             </a>
@@ -32,20 +40,32 @@
 $(document).ready(function(){
 $("#edit").click(function(){
     $("#edit").hide();
-    $("#save").show();
     $( ".sortable" ).sortable({
       placeholder: "list-placeholder"
     });
     $( ".sortable" ).disableSelection();
-    $("i.icon-reorder").show();
+    $(".edit-controls").show();
 });
-
+$(".delete").click(function(e){
+    var elem = $(this.parentElement.parentElement.parentElement.parentElement.parentElement);
+    elem.remove();
+    e.preventDefault();
+});
+$("#add").click(function(e){
+    var text = $("#addText").val();
+    $("#addText").val("");
+    var newElem = $(".sortable li").eq(0).clone();
+    newElem.find(".name")[0].childNodes[0].textContent = text;
+    newElem.find(".name .title").remove();
+    newElem.find(".badge").text("0");
+    newElem.find("a").attr("href","/category/"+text).attr("data-name",text);
+    $(".sortable").append(newElem);
+});
     $("#save").click(function(e){
         $("#edit").show();
-        $("#save").hide();
         $( ".sortable" ).sortable("destroy");
         $( ".sortable" ).enableSelection();
-        $("i.icon-reorder").hide();
+        $(".edit-controls").hide();
 
         NProgress.start();
         var data = {};
