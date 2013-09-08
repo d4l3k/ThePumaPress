@@ -1,14 +1,17 @@
+<script src="/js/tinymce/tinymce.min.js"></script>
 <section class="container">
     <% if editor? or current_user == @user %>
         <div class="buttons">
+            <button id="delete" class="normal-mode">Delete</button>
             <button id="edit" class="normal-mode">Edit</button>
             <button id="save" class="edit-mode">Save</button>
         </div>
     <% end %>
-    <h1>Staff of <%= @staff.year %></h1>
+    <h1>Staff of <span class="editable"><%= @staff.year %></span></h1>
     <title>Staff of <%= @staff.year %> - The Puma Press</title>
+    <i class="editable"><%= @staff.description %></i>    
     <hr>
-    <% @staff.users.each do |@user| %>
+    <% @staff.users.each do |user| @user = user %>
         <div class="picture pull-left">
             <a style="background-image: url('<%= @user.display_picture %>')" href="<%= @user.display_picture %>"></a>
         </div>
@@ -21,19 +24,52 @@
     <% end %>
     <script>
 $(document).ready(function(){
-    $(".user_options select").change(function(e){
-        var option = this.selectedOptions[0];
-        var root = this.parentElement.parentElement;
-        var user = root.dataset.username;
-        var rank = parseInt(option.dataset.rank);
+function editor_enable(){
+    tinymce.init({
+        selector: "i.editable",
+        inline: true,
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    });
+    $(".edit-mode").show();
+    $(".normal-mode").hide();
+}
+function editor_disable(){
+    tinymce.remove("span.editable");
+    tinymce.remove("i.editable");
+    $(".edit-mode").hide();
+    $(".normal-mode").show();
+    $(".picture-upload").hide();
+}
+    $("#edit").click(function(){
+        editor_enable();
+    });
+    $("#save").click(function(){
+        var data = {
+            year: $("span.editable").text(),
+            description: $("i.editable").text()
+        };
         NProgress.start();
-        $.post("/user/"+user, {rank:rank}, function(data) {
+        $.post(window.location.pathname, data, function(data) {
             json = JSON.parse(data);
+            editor_disable();
             NProgress.done();
         });
-    }).click(function(e){
-        e.preventDefault();
     });
+    <% if @staff.year == "new" %>
+        $("span.editable").text("");
+        tinymce.init({
+            selector: "span.editable",
+            inline: true,
+            toolbar: "undo redo",
+            menubar: false
+        });
+        editor_enable();
+    <% end %>
 });        
     </script>
 </section>

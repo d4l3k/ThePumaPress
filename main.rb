@@ -53,7 +53,7 @@ end
 class Staff
     include DataMapper::Resource
     property    :year,          String,     key:true
-    property    :description    String
+    property    :description,   String
     has n,      :users,         :through => Resource
 end
 
@@ -95,7 +95,7 @@ class User
     property :picture, Text, :default => ""
     property :password, BCryptHash
     has n, :articles, :through => Resource
-    has n, :staff, :through => Resource
+    has n, :staffs, :through => Resource
     def display_name
         if self.name.length > 0
             return self.name
@@ -211,6 +211,42 @@ configure do
 end
 get '/' do
     erb :index
+end
+class StaffNew
+    def year
+        "new"
+    end
+    def description
+        "No description..."
+    end
+    def users
+        []
+    end
+end
+get '/staff/new' do
+    editor_required!
+    @staff = StaffNew.new
+    erb :staff
+end
+get '/staff/:staff' do
+    @staff = Staff.get(params['staff'])
+    erb :staff
+end
+post '/staff/:staff' do
+    editor_required!
+    staff = nil
+    if params['staff']=="new"
+        staff = Staff.new
+        staff.year = params["year"].split("-").map{|year| year.strip}.join("-")
+    else
+        staff = Staff.get(params["staff"])
+    end
+    staff.description = params["description"]
+    response = {}
+    saved = staff.save
+    response[:year] = staff.year
+    response[:saved] = saved
+    JSON.dump response
 end
 get '/article/new' do
     author_required!

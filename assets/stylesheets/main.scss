@@ -501,6 +501,9 @@ h1 {
             font-weight: normal;
         }
     }
+    span.editable {
+        display: inline-block;
+    }
 }
 .edit-mode {
     display: none;
