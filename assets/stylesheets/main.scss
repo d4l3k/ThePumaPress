@@ -261,9 +261,11 @@ footer {
         }
         &.copyright {
             text-align: center;
+            color: transparentize(white,0.5);
+            line-height: 24px;
             a {
                 font-size: 14px;
-                text-decoration: none;
+                text-decoration:none;
                 color: white;
                 &:hover {
                     color: darken(white,30%);
