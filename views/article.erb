@@ -26,7 +26,8 @@ function editor_disable(){
     tinymce.remove("h1.editable");
     tinymce.remove("div.editable");
     $(".edit-mode").hide();
-    $("a.category").text($("select.category").val());
+    var category = $("select.category").val();
+    $(".category-wrap").html("<h1 class='category'><a href='/category/"+category+"'>"+category.replace("/"," / ")+"</a></h1>");
     $(".normal-mode").show();
     disable_user_selector();
 }
@@ -123,7 +124,7 @@ $(document).ready(function(){
             <% end %>
         </select>
         <!-- <a class="category normal-mode" href="/category/<%= @article.category.name %>"><%= @article.category.name %></a> -->
-        <span class="normal-mode">
+        <span class="normal-mode category-wrap">
             <%= @article.category.html_name true %>
         </span>
         <span class="slash">&#151;</span>
