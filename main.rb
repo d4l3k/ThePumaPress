@@ -1,5 +1,5 @@
 require 'bundler'
-Bundler.require
+Bundler.require(:default)
 
 DataMapper.setup(:default, 'postgres://postgres:@192.168.1.152/pumapress')
 
@@ -8,18 +8,19 @@ set :assets_precompile, %w(default.css default.js *.png *.jpg *.svg *.eot *.ttf 
 
 # Logical path to your assets
 set :assets_prefix, 'assets'
+configure :development do
+    Bundler.require(:development)
+    set :assets_debug, true
+    #use PryRescue::Rack
+end
+configure :production do
+    Bundler.require(:production);
+    # CSS minification
+    set :assets_css_compressor, :sass
 
-# Use another host for serving assets
-#set :assets_host, '<id>.cloudfront.net'
-
-# Serve assets using this protocol
-#set :assets_protocol, :http
-
-# CSS minification
-set :assets_css_compressor, :sass
-
-# JavaScript minification
-set :assets_js_compressor, :uglifier
+    # JavaScript minification
+    set :assets_js_compressor, :closure
+end
 register Sinatra::AssetPipeline
 
 class Article
@@ -31,6 +32,7 @@ class Article
     property :published,  Boolean, :default => false
     property :published_on, DateTime
     belongs_to :category
+    has n, :users, :through => Resource
     def image_path
         if self.image.length==0
             return "http://i.imgur.com/LbwGoRz.jpg"
@@ -60,6 +62,7 @@ class User
     property :about, Text, :default => "No description..."
     property :picture, Text, :default => ""
     property :password, BCryptHash
+    has n, :articles, :through => Resource
     def display_name
         if self.name.length > 0
             return self.name
@@ -200,6 +203,13 @@ post '/article/:article' do
     if params["image"]
         document.image = params["image"]
     end
+    if params["authors"]
+        authors = []
+        params["authors"].each do |auth|
+            authors.push User.get auth
+        end
+        document.users = authors
+    end
     if params["published"] and editor?
         document.published = params["published"]=='true'
         document.published_on = DateTime.now
@@ -238,14 +248,14 @@ post '/categories' do
     end
     "{}"
 end
-get '/category/:category' do
-    category_name = params['category']
+get '/category/*' do
+    category_name = params[:splat][0]
     if category_name=="unpublished"
         editor_required!
         @category = CategoryUnpublished.new
         @noedit = true
     else
-        @category = Category.get(params['category'])
+        @category = Category.get(category_name)
     end
     if !@category
         flash[:error] = "ERROR: Invalid Category."
@@ -278,6 +288,13 @@ get '/article/:article' do
         redirect '/'
     end
     erb :article
+end
+delete '/article/:article' do
+    author_required!
+    @article = Article.get(params['article'].to_i)
+    if @article
+        @article.destroy!
+    end
 end
 get '/user/:user' do
     @user = User.get(params['user'])

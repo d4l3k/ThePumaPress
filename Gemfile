@@ -2,8 +2,6 @@ source 'https://rubygems.org'
 ruby '1.9.3'
 gem 'redis'
 gem 'sinatra'
-gem 'pry'
-gem 'pry-rescue'
 gem 'thin'
 gem 'erubis'
 gem 'json'
@@ -13,3 +11,11 @@ gem 'dm-postgres-adapter'
 gem 'dm-types'
 gem 'curb'
 gem 'sinatra-flash', require:'sinatra/flash'
+
+group :development do
+    gem 'pry'
+    gem 'pry-rescue'
+end
+group :production do
+    gem 'closure-compiler'
+end

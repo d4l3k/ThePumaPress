@@ -18,19 +18,19 @@ function editor_enable(){
         ],
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     });
-    $("#save").show();
-    $("#publish, #edit").hide();
-    $("select.category").show();
-    $("a.category").hide();
+    $(".edit-mode").show();
+    $(".normal-mode").hide();
+    enable_user_selector();
 }
 function editor_disable(){
     tinymce.remove("h1.editable");
     tinymce.remove("div.editable");
-    $("#save").hide();
-    $("select.category").hide();
-    $("a.category").text($("select.category").val()).show();
-    $("#publish, #edit").show();
+    $(".edit-mode").hide();
+    $("a.category").text($("select.category").val());
+    $(".normal-mode").show();
+    disable_user_selector();
 }
+$(".edit-mode").hide();
 $(document).ready(function(){
     $("#save").click(function(){
         var headline = $("h1.editable").text();
@@ -38,8 +38,13 @@ $(document).ready(function(){
         var image = $("div.editable img").attr("src");
         var category = $("select.category").val();
         document.title = headline+" - The Puma Press";
+        var authors = [];
+        $("#authors li").each(function(index, elem){
+            var user = elem.dataset.username;
+            authors.push(user);
+        });
         NProgress.start();
-        $.post(window.location.pathname, {title:headline,body:content,image:image,category:category}, function(data) {
+        $.post(window.location.pathname, {title:headline,body:content,image:image,category:category,authors:authors}, function(data) {
             json = JSON.parse(data);
             window.history.pushState({},"","/article/"+json.id);
             editor_disable();
@@ -61,6 +66,19 @@ $(document).ready(function(){
             }
             NProgress.done();
         });
+    });
+    $("#delete").click(function(){
+        if(confirm("Are you sure you want to delete this article?")){
+            NProgress.start();
+            $.ajax({
+                url: window.location.pathname,
+                type: 'DELETE',
+                success: function(result) {
+                    NProgress.done();
+                    window.location.pathname = "/"
+                }
+            });
+        }
     });
 });
 </script>
@@ -86,19 +104,20 @@ $(document).ready(function(){
 <section class="container">
     <% if author? %>
         <div class="buttons">
-            <button id="edit" onclick="editor_enable()">Edit</button>
-            <button id="save" style="display: none;">Save</button>
+            <button id="delete" class="normal-mode">Delete</button>
+            <button id="edit" class="normal-mode" onclick="editor_enable()">Edit</button>
+            <button id="save" class="edit-mode" style="display: none;">Save</button>
             <% if editor? %>
                 <% if @article && @article.published %>
-                    <button id="publish">Unpublish</button>
+                    <button id="publish" class="normal-mode">Unpublish</button>
                 <% else %>
-                    <button id="publish">Publish</button>
+                    <button id="publish" class="normal-mode">Publish</button>
                 <% end %>
             <% end %>
         </div>
     <% end %>
     <% if @article %>
-        <select class="category" style="display: none;">
+        <select class="category edit-mode" style="display: none;">
             <% Category.all.each do |cat| %>
                 <option <%= (cat.name==@article.category.name)?"selected":"" %>><%= cat.name %></option>
             <% end %>
@@ -106,7 +125,17 @@ $(document).ready(function(){
         <a class="category" href="/category/<%= @article.category.name %>"><%= @article.category.name %></a>
         <span class="slash">&#151;</span>
         <h1 class="editable"><%= @article.title %></h1>
+        <br>
         <div id="published" class="<%= @article.published ? "" : "not" %>">Published: <%= @article.published ? @article.published_on.strftime("%B %e, %Y") : "Not Published" %></div>
+         &nbsp;|&nbsp; 
+        <div id="authors">By
+            <ul class="author-list sortable">
+                <% @article.users.each do |user| %>
+                    <li data-username="<%= user.username %>"><a href="/user/<%= user.username %>" class="author"><%= user.display_name %></a></li>
+                <% end %>
+            </ul>
+        </div>
+        <%= erb :user_selector %>
         <div class="editable" style="width:100%;"><%= @article.body %></div>
         <title><%= @article.title %> - The Puma Press</title>
     <% else %>
@@ -118,7 +147,11 @@ $(document).ready(function(){
         <a class="category" href="/category/<%= Category.first.name %>"><%= Category.first.name %></a>
         <span class="slash">&#151;</span>
         <h1 class="editable">Have a Headline</h1>
+        <br>
         <div id="published" class="not">Published: Not Published</div>
+         | 
+         <div id="authors">By <ul class="author-list sortable"></ul></div>
+        <%= erb :user_selector %>
         <div class="editable" style="width:100%;">And some content.</div>
         <title>New Article - The Puma Press</title>
     <% end %>

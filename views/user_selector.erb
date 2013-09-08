@@ -1,0 +1,23 @@
+<div class="user_selector edit-mode" style="display: none;">
+    <ul class="author-list sortable">
+        <% User.all(:rank.gte => 50).each do |user| %>
+            <li data-username="<%= user.username %>">
+                <a href="/user/<%= user.username %>" class="author"><%= user.display_name %></a>
+            </li>
+        <% end %>
+    </ul>
+</div>
+<script>
+function enable_user_selector(){
+    $(".user_selector").show();
+    $( ".sortable" ).sortable({
+      connectWith: ".sortable"
+    }).disableSelection();
+    $(".sortable").addClass("outline");
+}
+function disable_user_selector(){
+    $(".user_selector").hide();
+    $(".sortable").sortable("destroy").enableSelection();
+    $(".sortable").removeClass("outline");
+}
+</script>

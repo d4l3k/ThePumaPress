@@ -176,12 +176,17 @@ h1.editable {
     font-size: 1.5em;
     margin: 0 10px;
 }
-#published {
-    font-style: italic;
-    font-size: 0.8em;
+#authors, #published {
+    font-size: 14px;
+    display: inline-block;
     &.not {
         color: red;
     }
+}
+#authors .sortable {
+    min-width: 100px;
+    min-height: 10px;
+    display: inline-block;
 }
 .article_well {
     a {
@@ -401,10 +406,38 @@ ul.list {
     float: right;
     margin: 0.83em;
 }
-.editable.mce-content-body {
+.outline, .editable.mce-content-body {
     min-height: 20px;
     min-width: 100px;
     outline: 1px dashed $blue;
+}
+.sortable.author-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: 14px;
+    li {
+        display: inline-block;
+        .author {
+            //color: white;
+            //background-color: $blue;
+            display: inline-block;
+            height: 14px;
+            line-height: 14px;
+            font-style: none;
+            font-size: 14px;
+        }
+        & + li {
+            &:before {
+                content: ", ";
+                margin-right: 1px;
+                font-size: 14px;
+            }
+        }
+    }
+}
+.user_selector {
+    margin-top: 9px;
 }
 i.editable {
     display: block;
