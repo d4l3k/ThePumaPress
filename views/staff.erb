@@ -20,6 +20,14 @@
             <span class="slash">&#151;</span>
             <h1 id="title" class="editable"><%= @user.title %></h1>
             <div class="editable" style="width:100%;"><%= @user.about %></div>
+            <% if @user.articles.length > 0 %>
+                <div class="articles">
+                    <%= @user.display_name %> has written <%= @user.articles.length.to_s + " " + ( @user.articles.length==1 ? "article" : "articles" ) %> for The Puma Press: 
+                    <% @user.articles.each_with_index do |article, index| %>
+                        <a href="/article/<%= article.id %>"><%= article.title %></a><%= index < @user.articles.length-1 ? ", " : "" %><%= index == @user.articles.length-2 ? "and " : "" %>
+                    <% end %>
+                </div>
+            <% end %>
         </div>        
     <% end %>
     <script>

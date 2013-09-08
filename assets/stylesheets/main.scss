@@ -1,5 +1,8 @@
 $blue: #15355e;
 
+$white-hover: transparentize(white,0.5);
+$blue-hover: transparentize($blue,0.5);
+
 * {
     font-family: 'Lato', sans-serif;
 }
@@ -74,7 +77,7 @@ hr {
     display: block;
     text-decoration: none;
     &:hover {
-        color: darken(white,30%);
+        color: $white-hover;
     }
 }
 #slider {
@@ -119,7 +122,7 @@ hr {
         font-weight: bold;
         line-height:36px;
         &:hover {
-            color: transparentize(white,0.5);
+            color: $white-hover;
         }
     }
     li {
@@ -197,7 +200,7 @@ a.category {
     text-decoration: none;
     color: $blue;
     &:hover {
-        color: lighten($blue,30%);
+        color: $blue-hover;
     }
 }
 h1.editable {
@@ -233,6 +236,7 @@ h1.editable {
         background-repeat: no-repeat;
         background-size: cover;
         -moz-background-size: cover;
+        text-decoration: none;
         div {
             position: relative;
             height: 36px;
@@ -249,7 +253,7 @@ h1.editable {
 
         }
         &:hover div {
-            color: darken(white,30%);
+            color: $white-hover;
         }
     }
 }
@@ -288,7 +292,7 @@ footer {
                         color: white;
                         text-decoration: none;
                         &:hover {
-                            color: darken(white,30%);
+                            color: $white-hover;
                             text-decoration: underline;
                         }
                     }
@@ -297,7 +301,7 @@ footer {
         }
         &.copyright {
             text-align: center;
-            color: transparentize(white,0.5);
+            color: $white-hover;
             line-height: 24px;
             a {
                 font-size: 14px;
@@ -494,7 +498,7 @@ h1 {
             color: $blue;
             &:hover {
                 text-decoration: underline;
-                color: transparentize($blue, 0.5);
+                color: $blue-hover;
             }
         }
         &.slash {
