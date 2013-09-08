@@ -43,6 +43,7 @@ class Category
     include DataMapper::Resource
     property :name,         String, key:true
     property :description,  Text
+    property :index,        Integer, :default => 99999
     has n, :articles
 end
 
@@ -209,7 +210,7 @@ post '/article/:article' do
     JSON.dump response
 end
 class CategoryUnpublished
-    def articles
+    def articles *args
         Article.all published:false
     end
     def description
@@ -218,6 +219,23 @@ class CategoryUnpublished
     def name
         "Unpublished Articles"
     end
+end
+get '/categories' do
+    editor_required!
+    erb :categories
+end
+post '/categories' do
+    editor_required!
+    all_categories = Category.all.map {|cat| cat.name}
+    params.each do |cat, data|
+        all_categories.delete cat
+        category = Category.first_or_create name:cat
+        category.update index:data["index"]
+    end
+    all_categories.each do |cat|
+        Category.get(cat).destroy
+    end
+    "{}"
 end
 get '/category/:category' do
     category_name = params['category']

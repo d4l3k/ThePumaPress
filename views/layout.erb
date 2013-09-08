@@ -8,7 +8,7 @@
             <a href="/"><img src="<%= image_path "logo.jpg" %>"></img></a>
             <section class="nav_bar">
                 <ul>
-                    <% Category.all.each do |cat| %>
+                    <% Category.all(order:[:index.asc]).each do |cat| %>
                         <li><a href="/category/<%= cat.name %>"><%= cat.name.upcase %></a></li>
                     <% end %>
                     <li>
@@ -104,6 +104,7 @@
                                     <% if editor? %>
                                         <li><a href="/category/unpublished">Unpublished Articles</a></li>
                                         <li><a href="/users">User Managment</a></li>
+                                        <li><a href="/categories">Category Managment</a></li>
                                     <% end %>
                                  <% else %>
                                     <li><a href="/login">Login</a></li>

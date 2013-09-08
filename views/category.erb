@@ -40,7 +40,7 @@ $(document).ready(function(){
     <title><%= @category.name %> - The Puma Press</title>
     <hr>
     <div class="article_well">
-    <% @category.articles.each do |article| %>
+    <% @category.articles(published:true, order:[:published_on.desc]).each do |article| %>
         <a href="/article/<%= article.id %>" style="background-image: url('<%= article.image_path %>')">
             <div><%= article.title %></div>
         </a>

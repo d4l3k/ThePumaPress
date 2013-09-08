@@ -288,6 +288,30 @@ body > .wrapper {
         margin-right: 8px;
     }
 }
+.badge {
+    border-radius: 12px;
+    background-color: $blue;
+    color: white;
+    padding: 0 9px;
+    text-align: center;
+    display: inline-block;
+    height: 16px !important;
+    line-height: 16px !important;
+    font-size: 14px;
+    position: relative;
+    top: -1px;
+}
+ul.list {
+    list-style: none;
+    padding: 0;
+}
+.list-placeholder {
+    height: 24px;
+    width: 922px;
+    background-color: lighten($blue,30%);
+    border: 1px solid $blue;
+    padding: 8px;
+}
 .user {
     height: 24px;
     line-height: 24px;
@@ -301,11 +325,18 @@ body > .wrapper {
         .name {
             color: white;
         }
+        .badge {
+            background-color: white;
+            color: $blue;
+        }
     }
     .name {
         font-weight: bold;
         display: table-cell;
-        .title {
+        span {
+            line-height: 24px;
+            display: inline-block;
+            height: 24px;
             font-weight: normal;
         }
     }
@@ -373,7 +404,7 @@ body > .wrapper {
 .editable.mce-content-body {
     min-height: 20px;
     min-width: 100px;
-    border: 1px dashed $blue;
+    outline: 1px dashed $blue;
 }
 i.editable {
     display: block;

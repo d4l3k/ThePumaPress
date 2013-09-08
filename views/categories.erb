@@ -1,0 +1,64 @@
+<section class="container">
+    <div class="buttons">
+        <button id="edit">Edit</button>
+        <button id="save" style="display: none;">Save</button>
+    </div>
+    <h1>Category Management</h1>
+    <title>Category Management - The Puma Press</title>
+    <hr>
+    <ul class="sortable list">
+    <% Category.all(order:[:index.asc]).each do |categ| %>
+        <li>
+            <a class="user" data-name="<%= categ.name %>" href="/category/<%= categ.name %>">
+                <div class="name">
+                    <%= categ.name %>
+                    <% if categ.description && categ.description.strip.length>0 %>
+                        <span class="title">
+                            — <%= categ.description %>
+                        </span>
+                    <% end %>
+                    <span class="pull-right">
+                        <span class="badge badge-inverse">
+                            <%= categ.articles.length %>
+                        </span>
+                        &nbsp;<i class="icon-reorder" style="display: none;"></i> 
+                    </span>
+                </div>
+            </a>
+        </li>
+    <% end %>
+    </ul>
+    <script>
+$(document).ready(function(){
+$("#edit").click(function(){
+    $("#edit").hide();
+    $("#save").show();
+    $( ".sortable" ).sortable({
+      placeholder: "list-placeholder"
+    });
+    $( ".sortable" ).disableSelection();
+    $("i.icon-reorder").show();
+});
+
+    $("#save").click(function(e){
+        $("#edit").show();
+        $("#save").hide();
+        $( ".sortable" ).sortable("destroy");
+        $( ".sortable" ).enableSelection();
+        $("i.icon-reorder").hide();
+
+        NProgress.start();
+        var data = {};
+        $(".sortable li a").each(function(index, elem){
+            var category = elem.dataset.name
+            data[category] = {index: index};
+        });
+        $.post("/categories", data, function(data) {
+            json = JSON.parse(data);
+            NProgress.done();
+        });
+    });
+});        
+    </script>
+</section>
+
