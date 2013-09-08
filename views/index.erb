@@ -2,15 +2,29 @@
 
 <section id="coverflow_wrapper">
     <div id="coverflow">
-        <% Article.all(published:true).each do |art| %>
-            <div data-id=<%= art.id %> data-title="<%= art.title %>">
-                <div style="background-image: url('<%= art.image_path %>')">
-                    <a href="/article/<%= art.id %>">
-                        <%= art.title %>
-                    </a>
+        <% @categories = {}
+        index = 0
+        Category.all.each do |cat|
+            start_index = index
+            cat.articles(published:true).each do |art| 
+                index += 1 %>
+                <div data-id=<%= art.id %> data-title="<%= art.title %>">
+                    <div style="background-image: url('<%= art.image_path %>')">
+                        <a href="/article/<%= art.id %>">
+                            <%= art.title %>
+                        </a>
+                    </div>
                 </div>
-            </div>
-        <% end %>
+            <% end
+            if start_index != index
+                cat_sn = cat.name.split("/")[0]
+                if @categories[cat_sn]
+                    @categories[cat_sn][1]= index-0.5;
+                else
+                    @categories[cat_sn]=[start_index - 0.5, index - 0.5]
+                end
+            end
+        end %>
     </div>
     <div id="slider"></div>
 </section>
@@ -71,13 +85,37 @@ $("#coverflow").coverflow({
         $("#slider").slider( "option", "value", sky.value);        
      }
  });
+var max = $('#coverflow > *').length-1;
  $("#slider").slider({
      min: 0,
-     max: $('#coverflow > *').length-1,
+     max: max,
      value: defaultItem,
+    animate: true,
      slide: function(event, ui) {
          $("#coverflow").coverflow('select', ui.value, true);
      }
- });        
+ });
+function addCategoryToSlider(name, start, end){
+    if(start < 0) start = 0;
+    if(end > max) end = max;
+    var width = $("#slider").width();
+    var start_px = start * width / max;
+    var category_width = (end-start) * width / max - 5;
+    var category = $("<div></div>");
+    $("#slider").append(category);
+    category.addClass("slider-category");
+    category.width(category_width);
+    category.css({left:start_px+"px"});
+    category.text(name);
+    //if(start!=0)
+        category.append("<div class='pull-left'><i class='icon-angle-left'></i></div>");
+    //if(end<max)
+        category.append("<div class='pull-right'><i class='icon-angle-right'></i></div>");
+}
+$(document).ready(function(){
+    <% @categories.each do |cat, data| %>
+        addCategoryToSlider("<%= cat %>", <%= data[0] %>, <%= data[1] %>);
+    <% end %>
+});
 </script>
 

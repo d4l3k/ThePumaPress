@@ -78,10 +78,30 @@ hr {
     }
 }
 #slider {
-    width: 640px;
+    width: 940px;
     margin: 0 auto;
     position: relative;
     top: 400px;
+    height: 18px;
+    cursor: pointer;
+    .ui-slider-handle {
+        height: 26px;
+    }
+    .slider-category {
+        position: absolute;
+        height: 100%;
+        line-height: 100%;
+        text-align: center;
+        font-size: 18px;
+        color: $blue;
+        background-color: transparent;
+        font-weight: bold;
+        padding: 0 3px;
+        &:hover {
+            color: white;
+            background-color: $blue;
+        }
+    }
 }
 .nav_bar {
     margin: 10px 0;
