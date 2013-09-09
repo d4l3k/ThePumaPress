@@ -38,8 +38,8 @@
     }
     </script>    
     <ul class="staff-list sortable">
-    <% @staff.users.each do |user| @user = user %>
-        <li data-username="<%= user.username %>">
+    <% @staff.order.each do |user| @user = User.get(user) %>
+        <li data-username="<%= @user.username %>">
             <%= erb :user_render %>
         </li>
     <% end %>
