@@ -156,6 +156,7 @@ hr {
             left: -99999px;
             li {
                 border-top: 1px solid white;
+                white-space: nowrap;
             }
         }
     }
@@ -447,7 +448,7 @@ ul.list {
 }
 .buttons {
     float: right;
-    margin: 0.83em;
+    margin: 0;
 }
 .outline, .editable.mce-content-body {
     min-height: 20px;
@@ -459,6 +460,7 @@ ul.list {
     padding: 0;
     margin: 0;
     height: 14px;
+    min-height: initial;
     li {
         display: inline-block;
         .author {
@@ -471,6 +473,7 @@ ul.list {
             font-size: 14px;
         }
         & + li {
+
             &:before {
                 content: ", ";
                 margin-right: 1px;
@@ -511,4 +514,15 @@ h1 {
 }
 .edit-mode {
     display: none;
+}
+header {
+    margin-bottom: 16px;
+}
+h1 {
+    padding: 0;
+    margin: 0;
+}
+ul.staff-list {
+    list-style: none;
+    padding: 0;
 }

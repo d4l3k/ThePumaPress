@@ -32,6 +32,17 @@
                     <%  end
                     end %>
                     <li>
+                        <% staffs = Staff.all.sort{ |a, b| a.year <=> b.year } %>
+                        <a href="/staff/<%= staffs[0].year %>">STAFF</a>
+                        <ul>
+                            <% staffs.each do |staff| %>
+                                <li>
+                                    <a href="/staff/<%= staff.year %>"><%= staff.year %></a>
+                                </li>
+                            <% end %>
+                        </ul>
+                    </li>
+                    <li>
                         <form class="search" action="/search" method="get">
                             <input type="search" placeholder="SEARCH" name="q" results=10/>                        
                         </form>
@@ -125,6 +136,7 @@
                                         <li><a href="/category/unpublished">Unpublished Articles</a></li>
                                         <li><a href="/users">User Managment</a></li>
                                         <li><a href="/categories">Category Managment</a></li>
+                                        <li><a href="/staff/new">New Staff Group</a></li>
                                     <% end %>
                                  <% else %>
                                     <li><a href="/login">Login</a></li>

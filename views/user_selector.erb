@@ -1,9 +1,12 @@
 <div class="user_selector edit-mode" style="display: none;">
+    Select authors by dragging into box above: 
     <ul class="author-list sortable">
         <% User.all(:rank.gte => 50).each do |user| %>
-            <li data-username="<%= user.username %>">
-                <a href="/user/<%= user.username %>" class="author"><%= user.display_name %></a>
-            </li>
+            <% if not @article.users.include? user %>
+                <li data-username="<%= user.username %>">
+                    <a href="/user/<%= user.username %>" class="author"><%= user.display_name %></a>
+                </li>
+            <% end %>
         <% end %>
     </ul>
 </div>
