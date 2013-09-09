@@ -32,7 +32,7 @@
                     <%  end
                     end %>
                     <li>
-                        <% staffs = Staff.all.sort{ |a, b| a.year <=> b.year } %>
+                        <% staffs = Staff.all.sort{ |a, b| b.year <=> a.year } %>
                         <a href="/staff/<%= staffs[0].year %>">STAFF</a>
                         <ul>
                             <% staffs.each do |staff| %>

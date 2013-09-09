@@ -11,9 +11,35 @@
     <title>Staff of <%= @staff.year %> - The Puma Press</title>
     <i class="editable"><%= @staff.description %></i>    
     <hr>
-    <ul class="staff-list">
+    <div class="edit-mode" style="display: none;">
+        Select staff members by dragging into box below: 
+        <ul class="potential-staff-list author-list sortable">
+            <% User.all(:rank.gte => 50).each do |user| @user = user%>
+                <% if not @staff.users.include? user %>
+                    <li data-username="<%= user.username %>">
+                        <%= erb :user_render %>
+                    </li>
+                <% end %>
+            <% end %>
+        </ul>
+    </div>
+    <script>
+    function enable_user_selector(){
+        $(".user_selector").show();
+        $( ".sortable" ).sortable({
+          connectWith: ".sortable"
+        }).disableSelection();
+        $(".sortable").addClass("outline");
+    }
+    function disable_user_selector(){
+        $(".user_selector").hide();
+        $(".sortable").sortable("destroy").enableSelection();
+        $(".sortable").removeClass("outline");
+    }
+    </script>    
+    <ul class="staff-list sortable">
     <% @staff.users.each do |user| @user = user %>
-        <li>
+        <li data-username="<%= user.username %>">
             <%= erb :user_render %>
         </li>
     <% end %>
@@ -33,6 +59,7 @@ function editor_enable(){
     });
     $(".edit-mode").show();
     $(".normal-mode").hide();
+    enable_user_selector();
 }
 function editor_disable(){
     tinymce.remove("span.editable");
@@ -40,6 +67,7 @@ function editor_disable(){
     $(".edit-mode").hide();
     $(".normal-mode").show();
     $(".picture-upload").hide();
+    disable_user_selector();
 }
     $("#edit").click(function(){
         editor_enable();
@@ -47,14 +75,32 @@ function editor_disable(){
     $("#save").click(function(){
         var data = {
             year: $("span.editable").text(),
-            description: $("i.editable").text()
+            description: $("i.editable").text(),
+            users: []
         };
+        $(".staff-list [data-username]").each(function(index, elem){
+            data.users.push(elem.dataset.username);
+        });
         NProgress.start();
         $.post(window.location.pathname, data, function(data) {
             json = JSON.parse(data);
             editor_disable();
+            window.history.pushState({},"","/staff/"+data.year);
             NProgress.done();
         });
+    });
+    $("#delete").click(function(){
+        if(confirm("Are you sure you want to delete this article?")){
+            NProgress.start();
+            $.ajax({
+                url: window.location.pathname,
+                type: 'DELETE',
+                success: function(result) {
+                    NProgress.done();
+                    window.location.pathname = "/"
+                }
+            });
+        }
     });
     <% if @staff.year == "new" %>
         $("span.editable").text("");

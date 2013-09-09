@@ -230,7 +230,12 @@ get '/staff/new' do
 end
 get '/staff/:staff' do
     @staff = Staff.get(params['staff'])
-    erb :staff
+    if @staff
+        erb :staff
+    else
+        flash[:error]="No staff group found with that year."
+        redirect '/'
+    end
 end
 post '/staff/:staff' do
     editor_required!
@@ -242,11 +247,25 @@ post '/staff/:staff' do
         staff = Staff.get(params["staff"])
     end
     staff.description = params["description"]
+    staff_list = []
+    if params["users"]
+        params["users"].each do |user|
+            staff_list.push User.get(user)
+        end
+    end
+    staff.users = staff_list
     response = {}
     saved = staff.save
     response[:year] = staff.year
     response[:saved] = saved
     JSON.dump response
+end
+delete '/staff/:article' do
+    editor_required!
+    @article = Staff.get(params['article'])
+    if @article
+        @article.destroy!
+    end
 end
 get '/article/new' do
     author_required!

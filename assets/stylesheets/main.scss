@@ -214,7 +214,7 @@ h1.editable {
 .slash {
     //font-weight: bold;
     font-size: 1.5em;
-    margin: 0 10px;
+    margin: 0 0.3em;
 }
 #authors, #published {
     font-size: 14px;
@@ -522,7 +522,34 @@ h1 {
     padding: 0;
     margin: 0;
 }
-ul.staff-list {
-    list-style: none;
-    padding: 0;
+ul {
+    &.staff-list {
+        list-style: none;
+        padding: 0;
+        .content {
+            min-height: 259px;
+        }
+    }
+    &.potential-staff-list {
+        height: initial !important;
+        min-height: 100px !important;
+        li {
+            * {
+                font-size: 14px !important;
+            }
+            div, p {
+                display: inline-block;
+            }
+            .picture, div.editable, div.articles {
+                display: none;
+            }
+            h1.editable {
+                min-width: initial;
+            }
+            .content {
+                width: initial;
+                margin: 0;
+            }
+        }
+    }
 }
