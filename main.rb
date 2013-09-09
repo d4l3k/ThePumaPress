@@ -54,7 +54,7 @@ class Staff
     include DataMapper::Resource
     property    :year,          String,     key:true
     property    :description,   String
-    property    :order,         Object,     :default => []
+    property    :ordered,       Object,     :default => []
     has n,      :users,         :through => Resource
 end
 
@@ -217,6 +217,9 @@ class StaffNew
     def year
         "new"
     end
+    def ordered
+        []
+    end
     def description
         "No description..."
     end
@@ -254,7 +257,7 @@ post '/staff/:staff' do
             staff_list.push User.get(user)
         end
         staff.users = staff_list
-        staff.order = params["users"]
+        staff.ordered = params["users"]
     end
     response = {}
     saved = staff.save
