@@ -68,6 +68,7 @@ GEM
     json (1.8.0)
     json_pure (1.8.0)
     method_source (0.8.2)
+    minitest (4.7.5)
     multi_json (1.7.9)
     pry (0.9.12.2)
       coderay (~> 1.0.5)
@@ -79,6 +80,8 @@ GEM
     rack (1.5.2)
     rack-protection (1.5.0)
       rack
+    rack-test (0.6.2)
+      rack (>= 1.0)
     rake (10.1.0)
     redis (3.0.4)
     sass (3.2.10)
@@ -126,8 +129,10 @@ DEPENDENCIES
   dm-types
   erubis
   json
+  minitest
   pry
   pry-rescue
+  rack-test
   redis
   sinatra
   sinatra-asset-pipeline

@@ -20,3 +20,7 @@ end
 group :production do
     gem 'closure-compiler'
 end
+group :test do
+    gem 'minitest'
+    gem 'rack-test'
+end

@@ -237,7 +237,7 @@ get '/staff/:staff' do
     if @staff
         erb :staff
     else
-        flash[:error]="No staff group found with that year."
+        flash[:error]="ERROR: Nonexistant staff page."
         redirect '/'
     end
 end
@@ -394,6 +394,7 @@ get '/user/:user' do
     @user = User.get(params['user'])
     if !@user
         flash[:error]="ERROR: User not found."
+        redirect '/'
     end
     erb :user
 end
