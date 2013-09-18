@@ -322,6 +322,9 @@ class CategoryUnpublished
     def name
         "Unpublished Articles"
     end
+    def html_name
+        "<h1 class='category'>#{name}</h1>"
+    end
 end
 get '/categories' do
     editor_required!

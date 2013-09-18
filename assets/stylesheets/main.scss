@@ -35,7 +35,7 @@ hr {
 #coverflow {
     display: inline-block;
     height: 600px;
-    width: 2600px;
+    width: 10000px;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -61,7 +61,7 @@ hr {
     -moz-background-size: cover;
     height: 100%;
     width: 100%;
-     -webkit-box-reflect: below 24px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(.8, transparent), to(rgba(0,0,0,0.3)));
+    // -webkit-box-reflect: below 24px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(.8, transparent), to(rgba(0,0,0,0.3)));
 }
 #coverflow > div > div > a {
     position: relative;
