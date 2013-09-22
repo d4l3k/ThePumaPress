@@ -121,13 +121,14 @@ hr {
         text-decoration: none;
         font-weight: bold;
         line-height:36px;
-        &:hover {
-            color: $white-hover;
-        }
+    }
+    li:hover > a{
+        color: $white-hover;
     }
     li {
         display: inline-block;
         position: relative;
+        cursor:pointer;
         &.icon {
             margin-top: -20px;
             a {
@@ -157,6 +158,10 @@ hr {
             li {
                 border-top: 1px solid white;
                 white-space: nowrap;
+                display: block;
+                a {
+                    display: block;
+                }
             }
         }
     }
