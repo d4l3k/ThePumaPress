@@ -237,6 +237,7 @@ h1.editable {
     a {
         width: 250px;
         height: 250px;
+        position: relative;
         display: inline-block;
         background-position: center center;
         background-repeat: no-repeat;
@@ -244,16 +245,15 @@ h1.editable {
         -moz-background-size: cover;
         text-decoration: none;
         div {
-            position: relative;
-            height: 36px;
+            position: absolute;
             width: 232px;
             background-color: rgba(0,0,0,0.5);
             color: white;
             font-weight: bold;
-            padding: 0 9px;
+            padding: 8px 9px;
             font-size: 18px;
-            line-height: 36px;
-            top: 214px;
+            line-height: 20px;
+            bottom: 0;
             display: block;
             text-decoration: none;
 
