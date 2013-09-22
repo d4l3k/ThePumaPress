@@ -408,6 +408,13 @@ get '/users' do
     editor_required!
     erb :users
 end
+post '/user/new' do
+    editor_required!
+    user = User.create(username:params["username"],name:params["fullname"])
+    response = {}
+    response[:saved] = user.save
+    JSON.dump response
+end
 post '/user/:user' do
     user = User.get params["user"]
     if !(current_user == user or editor?)

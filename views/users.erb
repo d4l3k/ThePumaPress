@@ -1,4 +1,9 @@
 <section class="container">
+    <div class="buttons">
+        <input id="fullname" placeholder="Full Name"></input>
+        <input id="username" placeholder="Username"></input>
+        <button id="add">Add User</button>
+    </div>
     <h1>User Management</h1>
     <title>User Management - The Puma Press</title>
     <hr>
@@ -33,6 +38,16 @@ $(document).ready(function(){
         });
     }).click(function(e){
         e.preventDefault();
+    });
+    $("#add").click(function(e){
+        username = $("#username").val();
+        fullname = $("#fullname").val();
+        NProgress.start();
+        $.post("/user/new", {username:username,fullname:fullname}, function(data) {
+            json = JSON.parse(data);
+            NProgress.done();
+            $("section.container").append('<a class="user" data-rank="0" data-username="'+username+'" href="/user/'+username+'"><div class="name">'+fullname+'</div><div class="user_options"><select><option data-rank="0">Viewer</option><option data-rank="50" selected="">Author</option><option data-rank="100">Editor</option></select></div></a>');
+        });
     });
 });        
     </script>
